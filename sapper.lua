@@ -361,7 +361,7 @@ function(player)
         end
         if imgui.ToggleButton(u8"Блок перемещения окна", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
         imgui.Text(u8"Вы можете выбрать уровнь ниже:")
-        if imgui.Button(u8"Лёгкий") then 
+        if imgui.Button(u8"Легкий") then 
             data.square_lot_imgui.x[0] = 9
             data.square_lot_imgui.y[0] = 9
             data.bombs_imgui[0] = 10
