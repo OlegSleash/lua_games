@@ -175,7 +175,7 @@ function(player)
             else data.stage_cell[i] = 1 end
             if imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(1) and data.game_step == 1 then
                 if data.all_flags == data.bombs then
-                    sampAddChatMessage('{00FF00}[SAPPER]{FFFFFF} У Вас закончились флажки!')
+                    sampAddChatMessage('{00FF00}[SAPPER]{FFFFFF} . ... ........... ......!')
                 else
                     data.all_flags = data.all_flags + 1
                     imgui.AddCellAnim(i, 7, cell_size, cell_size*0.8, 0xFF3A3A3A, function()
@@ -249,11 +249,11 @@ function(player)
             0xBB000000, 7
         )
         local LoseTexts = {
-            u8"К сожалению Вы проиграли.",
-            u8"Но Вы можете попробовать снова!",
-            u8"Ваша статистика:",
-            u8("Время: "..convertime(data.end_time-data.start_time)),
-            u8("Угадано флажков: "..data.true_flags)
+            u8". ......... .. ..........",
+            u8".. .. ...... ........... .....!",
+            u8".... ..........:",
+            u8(".....: "..convertime(data.end_time-data.start_time)),
+            u8("....... .......: "..data.true_flags)
         }
 
         for i, v in pairs(LoseTexts) do
@@ -269,9 +269,9 @@ function(player)
             0xBB000000, 7
         )
         local WinText = {
-            u8"Поздравляю, Вы победили!",
-            u8"Можете попробовать более трудные комбинации!",
-            u8("Ваше время: "..convertime(data.end_time-data.start_time))
+            u8".........., .. ........!",
+            u8"...... ........... ..... ....... ..........!",
+            u8(".... .....: "..convertime(data.end_time-data.start_time))
         }
 
         for i, v in pairs(WinText) do
@@ -342,36 +342,36 @@ function(player)
         imgui.SetNextWindowSize(imgui.ImVec2((data.MenuAnimWindow/data.SMenuAnimWindow)*230, -1))
         imgui.SetNextWindowPos(imgui.ImVec2(WinSize.x + WP.x + 1, WP.y))
         imgui.Begin("MENU", data.ValidAnim, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar)
-        imgui.Text(u8"Выберете ниже количество бомб:")
+        imgui.Text(u8"........ .... .......... ....:")
         imgui.SetNextItemWidth(-1)
         imgui.SliderInt("##bombs", data.bombs_imgui, 1, (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1)
-        imgui.Text(u8"Выберете ниже ширину  поля:")
+        imgui.Text(u8"........ .... ......  ....:")
         imgui.SetNextItemWidth(-1)
         if imgui.SliderInt("##square_lotx", data.square_lot_imgui.x, 4, 30) then
             if ((data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1) < data.bombs_imgui[0] then
                 data.bombs_imgui[0] = (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1
             end
         end
-        imgui.Text(u8"Выберете ниже длину поля:")
+        imgui.Text(u8"........ .... ..... ....:")
         imgui.SetNextItemWidth(-1)
         if imgui.SliderInt("##square_loty", data.square_lot_imgui.y, 4, 30) then
             if ((data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1) < data.bombs_imgui[0] then
                 data.bombs_imgui[0] = (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1
             end
         end
-        if imgui.ToggleButton(u8"Блок перемещения окна", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
-        imgui.Text(u8"Вы можете выбрать уровнь ниже:")
-        if imgui.Button(u8"Легкий") then 
+        if imgui.ToggleButton(u8".... ........... ....", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
+        imgui.Text(u8".. ...... ....... ...... ....:")
+        if imgui.Button(u8"......") then 
             data.square_lot_imgui.x[0] = 9
             data.square_lot_imgui.y[0] = 9
             data.bombs_imgui[0] = 10
         end imgui.SameLine()
-        if imgui.Button(u8"Средний") then 
+        if imgui.Button(u8".......") then 
             data.square_lot_imgui.x[0] = 16
             data.square_lot_imgui.y[0] = 16
             data.bombs_imgui[0] = 40
         end imgui.SameLine()
-        if imgui.Button(u8"Профи") then 
+        if imgui.Button(u8".....") then 
             data.square_lot_imgui.x[0] = 16
             data.square_lot_imgui.y[0] = 30
             data.bombs_imgui[0] = 99
@@ -460,7 +460,7 @@ function imgui.ToggleButton(text, bool, a_speed)
     local dl = imgui.GetWindowDrawList()
     local bebrochka = false
     local label, label_true      = text or "", text or ""
-    local h          = imgui.GetTextLineHeightWithSpacing() -- Высота кнопки
+    local h          = imgui.GetTextLineHeightWithSpacing() -- ...... ......
     local w,r,s      = h * 1.7, h / 2, a_speed or 0.2
     local function ImSaturate(f) return f < 0.0 and 0.0 or (f > 1.0 and 1.0 or f) end
     local x_begin = bool[0] and 1.0 or 0.0
@@ -481,9 +481,9 @@ function imgui.ToggleButton(text, bool, a_speed)
             t_begin = bool[0] and 1.0 - anim or anim
         else LastActive[label] = false end
     end
-    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Цвет прямоугольника
-    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- Цвет текста при false
-    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- Цвет текста при true
+    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- .... ..............
+    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- .... ...... ... false
+    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- .... ...... ... true
     dl:AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + w, p.y + h), imgui.GetColorU32Vec4(bg_color), r)
     dl:AddCircleFilled(imgui.ImVec2(p.x + r + x_begin * (w - r * 2), p.y + r), t_begin < 0.5 and x_begin * r or t_begin * r, imgui.GetColorU32Vec4(imgui.ImVec4(0.9, 0.9, 0.9, 1.0)), r + 5)
     dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t_color), label_true)
