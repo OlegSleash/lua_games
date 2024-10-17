@@ -7,13 +7,13 @@ local data = {
    state_cell = {},
    temp_cells = {},
    game_step = 1,
-   square_lot = 9,
+   square_lot = {x = 9, y = 9},
    bombs = 10,
    true_flags = 0,
    all_flags = 0,
    start_time = 0,
    end_time = 0,
-   square_lot_imgui = new.int(9),
+   square_lot_imgui = {x = new.int(9), y = new.int(9)},
    bombs_imgui = new.int(10),
    ValidAnim = new.bool(false),
    images = {
@@ -33,7 +33,8 @@ local data = {
     SMenuAnimText   = 300,
     cells_anims = {},
     cs = 0,
-    LockWin = false
+    LockWin = false,
+    LockHovCell = false
 }
 function imgui.AddCellAnim(cellid, frames, Ssize, Esize, Ecolor, Efunc)
     data.cells_anims[cellid] = {
@@ -64,20 +65,24 @@ function random(x, y)
     elseif x ~= 0 and y == 0 then math.randomseed(r) return math.random(x)
     else math.randomseed(r) return math.random(x, y) end
 end
-function normal(cell_id) if cell_id > 0 and cell_id <= data.square_lot*data.square_lot then return true else return false end end
-function StartSapper()
+function normal(cell_id) if cell_id > 0 and cell_id <= data.square_lot.x*data.square_lot.y then return true else return false end end
+function StartSapper(cell)
     data.cells_anims = {}
     data.start_time = os.time()
-    data.square_lot = data.square_lot_imgui[0]
+    data.square_lot.x = data.square_lot_imgui.x[0]
+    data.square_lot.y = data.square_lot_imgui.y[0]
     data.bombs = data.bombs_imgui[0]
     data.game_step = 1
     data.true_flags = 0
     data.all_flags = 0
-    for i = 1, data.square_lot*data.square_lot do data.stage_cell[i] = 1 end
-    for i = 1, data.square_lot*data.square_lot do data.state_cell[i] = {false, false} end
+    for i = 1, data.square_lot.x*data.square_lot.y do data.stage_cell[i] = 1 end
+    for i = 1, data.square_lot.x*data.square_lot.y do data.state_cell[i] = {false, false} end
     for i = 1, data.bombs do
         ::restart_bomb::
-        local bmb = random(data.square_lot*data.square_lot)
+        local bmb = random(data.square_lot.x*data.square_lot.y)
+        if cell then
+            if CellsNear(bmb, cell) then
+                goto restart_bomb end end
         if data.state_cell[bmb][2] == true then goto restart_bomb else data.state_cell[bmb][2] = true end
     end
     WinOpen[0] = true
@@ -94,27 +99,27 @@ function OpenCell(cell)
    if data.state_cell[cell][1] == true then goto go_to_end_check end
    data.state_cell[cell][1] = true
    data.stage_cell[cell] = 13
-   if ((cell - 1) % data.square_lot) ~= 0 then
+   if ((cell - 1) % data.square_lot.x) ~= 0 then
       if normal(cell-1) then if data.state_cell[cell-1][2] == true then mines_near = mines_near + 1 end end
-      if normal(cell+data.square_lot-1) then if data.state_cell[cell+data.square_lot-1][2] == true then mines_near = mines_near + 1 end end
-      if normal(cell-data.square_lot-1) then if data.state_cell[cell-data.square_lot-1][2] == true then mines_near = mines_near + 1 end end end
-   if (cell % data.square_lot) ~= 0 then
+      if normal(cell+data.square_lot.x-1) then if data.state_cell[cell+data.square_lot.x-1][2] == true then mines_near = mines_near + 1 end end
+      if normal(cell-data.square_lot.x-1) then if data.state_cell[cell-data.square_lot.x-1][2] == true then mines_near = mines_near + 1 end end end
+   if (cell % data.square_lot.x) ~= 0 then
       if normal(cell+1) then if data.state_cell[cell+1][2] == true then mines_near = mines_near + 1 end end
-      if normal(cell-data.square_lot+1) then if data.state_cell[cell-data.square_lot+1][2] == true then mines_near = mines_near + 1 end end
-      if normal(cell+data.square_lot+1) then if data.state_cell[cell+data.square_lot+1][2] == true then mines_near = mines_near + 1 end end end
-   if normal(cell-data.square_lot) then if data.state_cell[cell-data.square_lot][2] == true then mines_near = mines_near + 1 end end
-   if normal(cell+data.square_lot) then if data.state_cell[cell+data.square_lot][2] == true then mines_near = mines_near + 1 end end
+      if normal(cell-data.square_lot.x+1) then if data.state_cell[cell-data.square_lot.x+1][2] == true then mines_near = mines_near + 1 end end
+      if normal(cell+data.square_lot.x+1) then if data.state_cell[cell+data.square_lot.x+1][2] == true then mines_near = mines_near + 1 end end end
+   if normal(cell-data.square_lot.x) then if data.state_cell[cell-data.square_lot.x][2] == true then mines_near = mines_near + 1 end end
+   if normal(cell+data.square_lot.x) then if data.state_cell[cell+data.square_lot.x][2] == true then mines_near = mines_near + 1 end end
    if mines_near == 0 then
-      if ((cell - 1) % data.square_lot) ~= 0 then
+      if ((cell - 1) % data.square_lot.x) ~= 0 then
          if normal(cell-1) then if data.state_cell[cell-1][2] == false and data.stage_cell[cell-1] == 1 then table.insert(data.temp_cells,cell-1) end end
-         if normal(cell+data.square_lot-1) then if data.state_cell[cell+data.square_lot-1][2] == false and data.stage_cell[cell+data.square_lot-1] == 1 then table.insert(data.temp_cells,cell+data.square_lot-1) end end
-         if normal(cell-data.square_lot-1) then if data.state_cell[cell-data.square_lot-1][2] == false and data.stage_cell[cell-data.square_lot-1] == 1 then table.insert(data.temp_cells,cell-data.square_lot-1) end end end
-      if (cell % data.square_lot) ~= 0 then
+         if normal(cell+data.square_lot.x-1) then if data.state_cell[cell+data.square_lot.x-1][2] == false and data.stage_cell[cell+data.square_lot.x-1] == 1 then table.insert(data.temp_cells,cell+data.square_lot.x-1) end end
+         if normal(cell-data.square_lot.x-1) then if data.state_cell[cell-data.square_lot.x-1][2] == false and data.stage_cell[cell-data.square_lot.x-1] == 1 then table.insert(data.temp_cells,cell-data.square_lot.x-1) end end end
+      if (cell % data.square_lot.x) ~= 0 then
          if normal(cell+1) then if data.state_cell[cell+1][2] == false and data.stage_cell[cell+1] == 1 then table.insert(data.temp_cells,cell+1) end end
-         if normal(cell-data.square_lot+1) then if data.state_cell[cell-data.square_lot+1][2] == false and data.stage_cell[cell-data.square_lot+1] == 1 then table.insert(data.temp_cells,cell-data.square_lot+1) end end
-         if normal(cell+data.square_lot+1) then if data.state_cell[cell+data.square_lot+1][2] == false and data.stage_cell[cell+data.square_lot+1] == 1 then table.insert(data.temp_cells,cell+data.square_lot+1) end end end
-      if normal(cell-data.square_lot) then if data.state_cell[cell-data.square_lot][2] == false and data.state_cell[cell-data.square_lot][1] == false and data.stage_cell[cell-data.square_lot] == 1 then table.insert(data.temp_cells,cell-data.square_lot) end end
-      if normal(cell+data.square_lot) then if data.state_cell[cell+data.square_lot][2] == false and data.state_cell[cell+data.square_lot][1] == false and data.stage_cell[cell+data.square_lot] == 1 then table.insert(data.temp_cells,cell+data.square_lot) end end
+         if normal(cell-data.square_lot.x+1) then if data.state_cell[cell-data.square_lot.x+1][2] == false and data.stage_cell[cell-data.square_lot.x+1] == 1 then table.insert(data.temp_cells,cell-data.square_lot.x+1) end end
+         if normal(cell+data.square_lot.x+1) then if data.state_cell[cell+data.square_lot.x+1][2] == false and data.stage_cell[cell+data.square_lot.x+1] == 1 then table.insert(data.temp_cells,cell+data.square_lot.x+1) end end end
+      if normal(cell-data.square_lot.x) then if data.state_cell[cell-data.square_lot.x][2] == false and data.state_cell[cell-data.square_lot.x][1] == false and data.stage_cell[cell-data.square_lot.x] == 1 then table.insert(data.temp_cells,cell-data.square_lot.x) end end
+      if normal(cell+data.square_lot.x) then if data.state_cell[cell+data.square_lot.x][2] == false and data.state_cell[cell+data.square_lot.x][1] == false and data.stage_cell[cell+data.square_lot.x] == 1 then table.insert(data.temp_cells,cell+data.square_lot.x) end end
    else data.stage_cell[cell] = 4 + mines_near end
    ::go_to_end_check::
    if data.state_cell[cell][2] == true then
@@ -133,7 +138,7 @@ function OpenCell(cell)
         local nextCell = data.temp_cells[1]
         table.remove(data.temp_cells, 1)
         if data.state_cell[nextCell][1] then goto go_to_end_check end
-        imgui.AddCellAnim(nextCell, 5, data.cs, data.cs*0.1, 0xFF55CC55, function()
+        imgui.AddCellAnim(nextCell, 1, data.cs, data.cs*0.1, 0xFF55CC55, function()
             OpenCell(nextCell)
             --goto check_cells
         end)
@@ -149,15 +154,16 @@ end)
 local Win = imgui.OnFrame(
 function() return WinOpen[0] end,
 function(player)
+    if not (imgui.IsMouseDown(0) or imgui.IsMouseDown(1)) then data.LockHovCell = false end
    if imgui.GetFrameCount() == 1 then imgui.SetNextWindowSize(imgui.ImVec2(400, 400)) end
-   imgui.Begin('Sapper', WinOpen, imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar + (data.LockWin and imgui.WindowFlags.NoMove or 0))
-    local cell_size = (math.min(imgui.GetWindowSize().x, imgui.GetWindowSize().y)-80)/data.square_lot
+   imgui.Begin('Sapper', WinOpen, imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar + ((data.LockHovCell or imgui.IsMouseDown(1) or data.LockWin) and imgui.WindowFlags.NoMove or 0))
+   local cell_size = math.min((imgui.GetWindowSize().x-80)/data.square_lot.x, (imgui.GetWindowSize().y-80)/data.square_lot.y)
     data.cs = cell_size
     local WinSize = imgui.GetWindowSize()
     local cpos = {x = 40, y = 40}
     local WP = imgui.GetWindowPos()
     local dl = imgui.GetWindowDrawList()
-    for i = 1, data.square_lot*data.square_lot do
+    for i = 1, data.square_lot.x*data.square_lot.y do
         imgui.SetCursorPos(cpos)
         if data.stage_cell[i] < 3 then -- 0x AA BB GG RR
             local RectColor = (data.cells_anims[i] ~= nil and data.cells_anims[i].Ec or (data.stage_cell[i] == 2 and 0xFF55CC55 or 0xFF33AA33))
@@ -165,13 +171,14 @@ function(player)
             local Ro = (cell_size - RectSize)/2
             dl:AddRectFilled({x=Ro+cpos.x+WP.x,y=Ro+cpos.y+WP.y}, {x = Ro+WP.x +cpos.x+RectSize, y = Ro+WP.y +cpos.y+RectSize}, RectColor, 8, GetRoundings(i))
             if imgui.IsPosHovered(cpos, WP, cell_size, i) and data.game_step == 1 then data.stage_cell[i] = 2
+                data.LockHovCell = true
             else data.stage_cell[i] = 1 end
-            if imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseClicked(1, false) and data.game_step == 1 then
+            if imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(1) and data.game_step == 1 then
                 if data.all_flags == data.bombs then
                     sampAddChatMessage('{00FF00}[SAPPER]{FFFFFF} У Вас закончились флажки!')
                 else
                     data.all_flags = data.all_flags + 1
-                    imgui.AddCellAnim(i, 13, cell_size, cell_size*0.8, 0xFF3A3A3A, function()
+                    imgui.AddCellAnim(i, 7, cell_size, cell_size*0.8, 0xFF3A3A3A, function()
                         data.stage_cell[i] = 3
                         if data.state_cell[i][2] == true then
                             data.true_flags = data.true_flags + 1
@@ -181,8 +188,18 @@ function(player)
                         end
                     end)
                 end
-            elseif imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseClicked(0, false) and data.game_step == 1 then
-                imgui.AddCellAnim(i, 5, cell_size, cell_size*0.1, 0xFF55CC55, function() OpenCell(i) end)
+            elseif imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(0) and data.game_step == 1 then
+                imgui.AddCellAnim(i, 1, cell_size, cell_size*0.1, 0xFF55CC55, function()
+                    if IsAllCellsClosed() then
+                        data.square_lot.x = data.square_lot_imgui.x[0]
+                        data.square_lot.y = data.square_lot_imgui.y[0]
+                        data.bombs = data.bombs_imgui[0]
+                        if data.square_lot.x*data.square_lot.y - 9 >= data.bombs then
+                            StartSapper(i)
+                        end
+                    end
+                    OpenCell(i)
+                end)
             end
         elseif data.stage_cell[i] < 5 then
             local RectColor = (data.cells_anims[i] ~= nil and data.cells_anims[i].Ec or 0xFF3A3A3A)
@@ -193,9 +210,10 @@ function(player)
             end
             imgui.SetCursorPos({x=cpos.x+cell_size*0.1,y=cpos.y+cell_size*0.1})
             imgui.Image(data.stage_cell[i] == 3 and data.images.flag or data.images.mine, imgui.ImVec2(cell_size*0.8, cell_size*0.8))
-            if imgui.IsItemClicked(1) and data.game_step == 1 and data.stage_cell[i] == 3 then
+            if imgui.IsItemHovered() then data.LockHovCell = true end
+            if imgui.IsMouseReleased(1) and imgui.IsItemHovered() and data.game_step == 1 and data.stage_cell[i] == 3 then
                 data.all_flags = data.all_flags - 1
-                imgui.AddCellAnim(i, 20, cell_size*0.8, cell_size, 0xFF33AA33, function()
+                imgui.AddCellAnim(i, 7, cell_size*0.8, cell_size, 0xFF33AA33, function()
                     if data.stage_cell[i] == 3 then
                         data.stage_cell[i] = 1
                         if data.state_cell[i][2] == true then
@@ -206,6 +224,14 @@ function(player)
             end
         elseif data.stage_cell[i] < 13 then
             local CalcStage = imgui.CalcTextSize(tostring(data.stage_cell[i]-4))
+            if imgui.IsPosHovered(cpos, WP, cell_size) and imgui.IsMouseReleased(0) then
+                local nearflags, cellsforopen = GetNearFlags(i)
+                if nearflags == data.stage_cell[i]-4 and #cellsforopen > 0 then
+                    for _, v in pairs(cellsforopen) do
+                        imgui.AddCellAnim(v, 3, cell_size, cell_size*0.1, 0xFF55CC55, function() OpenCell(v) end)
+                    end
+                end
+            end
             imgui.SetCursorPos({
                 x = cpos.x + cell_size/2 - CalcStage.x/2,
                 y = cpos.y + cell_size/2 - CalcStage.y/2
@@ -213,13 +239,13 @@ function(player)
             imgui.Text(tostring(data.stage_cell[i]-4))
         end
         cpos.x = cpos.x + cell_size -1
-        if (i % data.square_lot) == 0 then cpos = {x = 40, y = cpos.y + cell_size -1 } end
+        if (i % data.square_lot.x) == 0 then cpos = {x = 40, y = cpos.y + cell_size -1 } end
     end
    if data.game_step == 0 then
         dl:AddRectFilled({
             x= WP.x + 40, y = WP.y + 40}, {
-            x= WP.x + 40 + data.square_lot*cell_size-data.square_lot+1,
-            y= WP.y + 40 + data.square_lot*cell_size-data.square_lot+1},
+            x= WP.x + 40 + data.square_lot.x*cell_size-data.square_lot.x+1,
+            y= WP.y + 40 + data.square_lot.y*cell_size-data.square_lot.y+1},
             0xBB000000, 7
         )
         local LoseTexts = {
@@ -232,14 +258,14 @@ function(player)
 
         for i, v in pairs(LoseTexts) do
             local CalcNowText = imgui.CalcTextSize(v)
-            imgui.SetCursorPos({x=40+(data.square_lot*cell_size)/2-CalcNowText.x/2, y = 40 + CalcNowText.y*(i-1)})
+            imgui.SetCursorPos({x=40+(data.square_lot.x*cell_size)/2-CalcNowText.x/2, y = 40 + CalcNowText.y*(i-1)})
             imgui.Text(v)
         end
     elseif data.game_step == 2 then
         dl:AddRectFilled({
             x= WP.x + 40, y = WP.y + 40}, {
-            x= WP.x + 40 + data.square_lot*cell_size-data.square_lot+1,
-            y= WP.y + 40 + data.square_lot*cell_size-data.square_lot+1},
+            x= WP.x + 40 + data.square_lot.x*cell_size-data.square_lot.x+1,
+            y= WP.y + 40 + data.square_lot.y*cell_size-data.square_lot.y+1},
             0xBB000000, 7
         )
         local WinText = {
@@ -250,7 +276,7 @@ function(player)
 
         for i, v in pairs(WinText) do
             local CalcNowText = imgui.CalcTextSize(v)
-            imgui.SetCursorPos({x=40+(data.square_lot*cell_size)/2-CalcNowText.x/2, y = 40 + CalcNowText.y*(i-1)})
+            imgui.SetCursorPos({x=40+(data.square_lot.x*cell_size)/2-CalcNowText.x/2, y = 40 + CalcNowText.y*(i-1)})
             imgui.Text(v)
         end
     end
@@ -265,15 +291,17 @@ function(player)
     imgui.Image(data.images.flag, imgui.ImVec2(KolvoSize.x, KolvoSize.y*2))
     imgui.SetCursorPos({x=0, y=0})
     imgui.Image(data.images.reset, {x=40,y=40})
-    if imgui.IsItemClicked() then StartSapper() end
+    if imgui.IsItemHovered() then data.LockHovCell = true end
+    if imgui.IsMouseReleased(0) and imgui.IsItemHovered() then StartSapper() end
     --
 
 
     ---
     imgui.SetCursorPos({x=WinSize.x-40, y=0})
     imgui.Image(data.images.settings, {x=40,y=40})
+    if imgui.IsItemHovered() then data.LockHovCell = true end
    -- image
-    if imgui.IsItemClicked() then data.ShowingMenu = not data.ShowingMenu end
+    if imgui.IsMouseReleased(0) and imgui.IsItemHovered() then data.ShowingMenu = not data.ShowingMenu end
     if data.ShowingMenu then
         if data.MenuAnimWindow ~= data.SMenuAnimWindow then
             data.MenuAnimWindow = data.MenuAnimWindow + data.SMenuAnimWindow/25
@@ -302,6 +330,9 @@ function(player)
     end
     if data.MenuAnimWindow ~= 0 then
         imgui.End()
+        imgui.PushStyleColorU32(imgui.Col.Button, 0x77117711)
+        imgui.PushStyleColorU32(imgui.Col.ButtonHovered, 0x88228822)
+        imgui.PushStyleColorU32(imgui.Col.ButtonActive, 0x99339933)
         imgui.PushStyleColorU32(imgui.Col.FrameBg, 0x77117711)
         imgui.PushStyleColorU32(imgui.Col.FrameBgHovered, 0x88228822)
         imgui.PushStyleColorU32(imgui.Col.FrameBgActive, 0x99339933)
@@ -313,16 +344,39 @@ function(player)
         imgui.Begin("MENU", data.ValidAnim, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar)
         imgui.Text(u8"Выберете ниже количество бомб:")
         imgui.SetNextItemWidth(-1)
-        imgui.SliderInt("##bombs", data.bombs_imgui, 1, (data.square_lot_imgui[0]*data.square_lot_imgui[0])-1)
-        imgui.Text(u8"Выберете ниже длинну стороны\nквадратного поля:")
+        imgui.SliderInt("##bombs", data.bombs_imgui, 1, (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1)
+        imgui.Text(u8"Выберете ниже ширину  поля:")
         imgui.SetNextItemWidth(-1)
-        if imgui.SliderInt("##square_lot", data.square_lot_imgui, 4, 20) then
-            if ((data.square_lot_imgui[0]*data.square_lot_imgui[0])-1) < data.bombs_imgui[0] then
-                data.bombs_imgui[0] = (data.square_lot_imgui[0]*data.square_lot_imgui[0])-1
+        if imgui.SliderInt("##square_lotx", data.square_lot_imgui.x, 4, 30) then
+            if ((data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1) < data.bombs_imgui[0] then
+                data.bombs_imgui[0] = (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1
+            end
+        end
+        imgui.Text(u8"Выберете ниже длину поля:")
+        imgui.SetNextItemWidth(-1)
+        if imgui.SliderInt("##square_loty", data.square_lot_imgui.y, 4, 30) then
+            if ((data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1) < data.bombs_imgui[0] then
+                data.bombs_imgui[0] = (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1
             end
         end
         if imgui.ToggleButton(u8"Блок перемещения окна", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
-        imgui.PopStyleColor(5)
+        imgui.Text(u8"Вы можете выбрать уровнь ниже:")
+        if imgui.Button(u8"Лёгкий") then 
+            data.square_lot_imgui.x[0] = 9
+            data.square_lot_imgui.y[0] = 9
+            data.bombs_imgui[0] = 10
+        end imgui.SameLine()
+        if imgui.Button(u8"Средний") then 
+            data.square_lot_imgui.x[0] = 16
+            data.square_lot_imgui.y[0] = 16
+            data.bombs_imgui[0] = 40
+        end imgui.SameLine()
+        if imgui.Button(u8"Профи") then 
+            data.square_lot_imgui.x[0] = 16
+            data.square_lot_imgui.y[0] = 30
+            data.bombs_imgui[0] = 99
+        end
+        imgui.PopStyleColor(8)
     end
    imgui.End()
 end)
@@ -345,7 +399,7 @@ function convertime(time)
     return asd:sub(1)
 end
 function imgui.IsPosHovered(cpos, WP, cell_size, cellid)
-    if data.cells_anims[cellid] ~= nil then return false end
+    if cellid ~= nil and data.cells_anims[cellid] ~= nil then return false end
     local p1, p2 = {x=cpos.x+WP.x,y=cpos.y+WP.y}, {x = WP.x +cpos.x+cell_size, y = WP.y +cpos.y+cell_size}
     local m = imgui.GetMousePos()
     if m.x < math.max(p1.x, p2.x)-1 and m.x > math.min(p1.x, p2.x)+1 and  m.y < math.max(p1.y, p2.y)-1 and m.y > math.min(p1.y, p2.y)+1 then return true
@@ -357,47 +411,45 @@ function GetRoundings(cell)
     local function isopen(i) return (data.stage_cell[i] > 2 and data.stage_cell[i] < 13) end
     if cell == 1 then
         ret[1] = true
-        --if isopen(cell+1) then ret[2] = true end
-        --if isopen(cell+data.square_lot) then ret[4] = true end
     end
-    if cell == data.square_lot then ret[2] = true end
-    if cell == data.square_lot*(data.square_lot-1) + 1 then ret[4] = true end
-    if cell == data.square_lot*data.square_lot then ret[8] = true end
-    if cell > data.square_lot and cell%data.square_lot ~= 1 then -- TL
-        if isopen(cell-1) and isopen(cell - data.square_lot) then
+    if cell == data.square_lot.x then ret[2] = true end
+    if cell == data.square_lot.x*(data.square_lot.y-1) + 1 then ret[4] = true end
+    if cell == data.square_lot.x*data.square_lot.y then ret[8] = true end
+    if cell > data.square_lot.x and cell%data.square_lot.x ~= 1 then -- TL
+        if isopen(cell-1) and isopen(cell - data.square_lot.x) then
             ret[1] = true
         end
     end
-    if cell > data.square_lot and cell%data.square_lot ~= 0 then
-        if isopen(cell-data.square_lot) and isopen(cell+1) then
+    if cell > data.square_lot.x and cell%data.square_lot.x ~= 0 then
+        if isopen(cell-data.square_lot.x) and isopen(cell+1) then
             ret[2] = true
         end
     end
-    if cell%data.square_lot~=1 and cell+data.square_lot<=data.square_lot*data.square_lot then
-        if isopen(cell-1) and isopen(cell+data.square_lot) then
+    if cell%data.square_lot.x~=1 and cell+data.square_lot.x<=data.square_lot.x*data.square_lot.y then
+        if isopen(cell-1) and isopen(cell+data.square_lot.x) then
             ret[4] = true
         end
     end
-    if cell+data.square_lot<=data.square_lot*data.square_lot and cell%data.square_lot ~= 0 then
-        if isopen(cell + 1) and isopen(cell+data.square_lot) then
+    if cell+data.square_lot.x<=data.square_lot.x*data.square_lot.y and cell%data.square_lot.x ~= 0 then
+        if isopen(cell + 1) and isopen(cell+data.square_lot.x) then
             ret[8] = true
         end
     end
-    if cell%data.square_lot == 0 then
-        if cell > data.square_lot and isopen(cell - data.square_lot) then ret[2] = true end
-        if cell+data.square_lot<=data.square_lot*data.square_lot and isopen(cell + data.square_lot) then ret[8] = true end
+    if cell%data.square_lot.x == 0 then
+        if cell > data.square_lot.x and isopen(cell - data.square_lot.x) then ret[2] = true end
+        if cell+data.square_lot.x<=data.square_lot.x*data.square_lot.y and isopen(cell + data.square_lot.x) then ret[8] = true end
     end
-    if cell%data.square_lot == 1 then
-        if cell > data.square_lot and isopen(cell - data.square_lot) then ret[1] = true end
-        if cell+data.square_lot<=data.square_lot*data.square_lot and isopen(cell + data.square_lot) then ret[4] = true end
+    if cell%data.square_lot.x == 1 then
+        if cell > data.square_lot.x and isopen(cell - data.square_lot.x) then ret[1] = true end
+        if cell+data.square_lot.x<=data.square_lot.x*data.square_lot.y and isopen(cell + data.square_lot.x) then ret[4] = true end
     end
-    if cell + data.square_lot > data.square_lot*data.square_lot then
-        if cell%data.square_lot ~= 1 and isopen(cell-1) then ret[4] = true end
-        if cell%data.square_lot ~= 0 and isopen(cell+1) then ret[8] = true end
+    if cell + data.square_lot.x > data.square_lot.x*data.square_lot.y then
+        if cell%data.square_lot.x ~= 1 and isopen(cell-1) then ret[4] = true end
+        if cell%data.square_lot.x ~= 0 and isopen(cell+1) then ret[8] = true end
     end
-    if cell <= data.square_lot then
-        if cell%data.square_lot ~= 1 and isopen(cell-1) then ret[1] = true end
-        if cell%data.square_lot ~= 0 and isopen(cell+1) then ret[2] = true end
+    if cell <= data.square_lot.x then
+        if cell%data.square_lot.x ~= 1 and isopen(cell-1) then ret[1] = true end
+        if cell%data.square_lot.x ~= 0 and isopen(cell+1) then ret[2] = true end
     end
     local ret2 = 0
     for k, v in pairs(ret) do if v then ret2 = ret2+k end end
@@ -437,4 +489,76 @@ function imgui.ToggleButton(text, bool, a_speed)
     dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t_color), label_true)
     dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t2_color), label)
     return bebrochka
+end
+function GetNearFlags(cell)
+    local nflags = 0
+    local NearClosedCells = {}
+    local sl = data.square_lot.x
+    local function isflag(a) return (data.stage_cell[a] == 3) end
+    if cell > sl then
+        if isflag(cell - sl) then
+            nflags = nflags + 1
+        elseif data.stage_cell[cell - sl] < 3 then
+            table.insert(NearClosedCells, cell - sl)
+        end
+        if cell%sl ~= 1 and isflag(cell - sl - 1) then
+            nflags = nflags + 1
+        elseif cell%sl ~= 1 and data.stage_cell[cell - sl - 1] < 3 then
+            table.insert(NearClosedCells, cell - sl - 1)
+        end
+        if cell%sl ~= 0 and isflag(cell - sl + 1) then
+            nflags = nflags + 1
+        elseif cell%sl ~= 0 and data.stage_cell[cell - sl + 1] < 3 then
+            table.insert(NearClosedCells, cell - sl + 1)
+        end
+    end
+    if cell+sl <= sl*data.square_lot.y then
+        if isflag(cell + sl) then
+            nflags = nflags + 1
+        elseif data.stage_cell[cell + sl] < 3 then
+            table.insert(NearClosedCells, cell + sl)
+        end
+        if cell%sl ~= 1 and isflag(cell + sl - 1) then
+            nflags = nflags + 1
+        elseif cell%sl ~= 1 and data.stage_cell[cell + sl - 1] < 3 then
+            table.insert(NearClosedCells, cell + sl - 1)
+        end
+        if cell%sl ~= 0 and isflag(cell + sl + 1) then
+            nflags = nflags + 1
+        elseif cell%sl ~= 0 and data.stage_cell[cell + sl + 1] < 3 then
+            table.insert(NearClosedCells, cell + sl + 1)
+        end
+    end
+    if cell%sl ~= 1 and isflag(cell - 1) then
+        nflags = nflags + 1
+    elseif cell%sl ~= 1 and data.stage_cell[cell - 1] < 3 then
+        table.insert(NearClosedCells, cell - 1)
+    end
+    if cell%sl ~= 0 and isflag(cell + 1) then
+        nflags = nflags + 1
+    elseif cell%sl ~= 0 and data.stage_cell[cell + 1] < 3 then
+        table.insert(NearClosedCells, cell + 1)
+    end
+    return nflags, NearClosedCells
+end
+function IsAllCellsClosed()
+    for i = 1, data.square_lot.x*data.square_lot.y do if data.stage_cell[i] > 2 then return false end end
+    return true
+end
+function CellsNear(cell1, cell2)
+    if cell1 == cell2 then return true end
+    local sl = data.square_lot.x
+    if cell1 > sl then
+        if cell2 == (cell1 - sl) then return true end
+        if cell1%sl ~= 1 and cell2 == (cell1 - sl - 1) then return true end
+        if cell1%sl ~= 0 and cell2 == (cell1 - sl + 1) then return true end
+    end
+    if cell1+sl <= sl*data.square_lot.y then
+        if cell2 == (cell1 + sl) then return true end
+        if cell1%sl ~= 1 and cell2 == (cell1 + sl - 1) then return true end
+        if cell1%sl ~= 0 and cell2 == (cell1 + sl + 1) then return true end
+    end
+    if cell1%sl ~= 1 and cell2 == (cell1 - 1) then return true end
+    if cell1%sl ~= 0 and cell2 == (cell1 + 1) then return true end
+    return false
 end
