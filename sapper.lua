@@ -565,5 +565,5 @@ end
 -- sleash games (SampGameStore) project
 local sleashGames = {}
 sleashGames.v = 1
-sleashGames.start = function() if WinOpen[0] == false then StartSnake() else WinOpen[0] = false end end
+sleashGames.start = function() if WinOpen[0] == false then StartSapper() else WinOpen[0] = false end end
 return sleashGames
