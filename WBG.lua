@@ -503,12 +503,10 @@ function imgui.dlIsItemHovered(a, b)
 		return true else return false
 	end 
 end
-
-function main()
-	while not isSampAvailable() do wait(100) end
-	updateData()
-	sampRegisterChatCommand("WBG", function() data.WinOpen[0] = not data.WinOpen[0] end)
-	while true do wait(1)
+updateData()
+lua_thread.create(function()
+while not isSampAvailable() do wait(100) end
+while true do wait(1)
 		if data.block_grab[1] ~= 0 and data.block_grab[2] ~= 0 and data.WinOpen[0] then
 			if isKeyJustPressed(0x41) then
 				lockPlayerControl(true)
@@ -544,6 +542,12 @@ function main()
 			end
 		end
 	end
+end)
+function main()
+	while not isSampAvailable() do wait(100) end
+	--updateData()
+	--sampRegisterChatCommand("WBG", function() data.WinOpen[0] = not data.WinOpen[0] end)
+	
 end
 imgui.OnInitialize(function()
 	data.img.blocks = imgui.CreateTextureFromFileInMemory(imgui.new('const char*', data.img.blocks_data), #data.img.blocks_data)
@@ -625,3 +629,7 @@ function imgui.TextQuestion(label, description)
         imgui.EndTooltip()
     end
 end
+local sleashGames = {}
+sleashGames.v = 1
+sleashGames.start = function() data.WinOpen[0] = not data.WinOpen[0] end
+return sleashGames
