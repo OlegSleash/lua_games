@@ -92,7 +92,7 @@ local data = {
 		score = 0,
 		point_field = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,1,1,2,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,0,0,1,1,1,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},{0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0},{0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0},{0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0},{0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0},{0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0},{0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},{0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},{0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0},{0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0},{0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0},{0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0},{0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0},{0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0},{0,1,1,2,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,0,0,1,1,1,1,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
 		time = 0,
-		ght = 2, -- 1 - Îõîòà, 2 - Óãëû, 3 - ÏÈÇÄÅÖ ÏÀÊÌÀÍ ÑÕÀÂÀË ÁÎËÜØÎÉ ÊĞÓÃ
+		ght = 2, -- 1 - ĞÑ…Ğ¾Ñ‚Ğ°, 2 - Ğ£Ğ³Ğ»Ñ‹, 3 - ĞŸĞ˜Ğ—Ğ”Ğ•Ğ¦ ĞŸĞĞšĞœĞĞ Ğ¡Ğ¥ĞĞ’ĞĞ› Ğ‘ĞĞ›Ğ¬Ğ¨ĞĞ™ ĞšĞ Ğ£Ğ“
 		rskin = 1,
 		sgs = 0.07,
 		stages = {{7, 1, false}, {27, 2, false}, {34, 1, false}, {54, 2, false}, {59, 1, false}, {79, 2, false}, {84, 1, false}},
@@ -338,7 +338,7 @@ function chooseRot(ghostname)
 		end
 	if dir > 0 then return dir else return -2 end
 end
-function main()
+lua_thread.create(function()
 	while not isSampAvailable() do wait(100) end
 	data.sfx.waka 	= loadAudioStreamFromMemory(memory.strptr(data.sfx.waka_data), #data.sfx.waka_data)
 	data.sfx.start 	= loadAudioStreamFromMemory(memory.strptr(data.sfx.start_data), #data.sfx.start_data)
@@ -346,13 +346,13 @@ function main()
 	data.sfx.dead 	= loadAudioStreamFromMemory(memory.strptr(data.sfx.dead_data), #data.sfx.dead_data)
 	data.sfx.gheat 	= loadAudioStreamFromMemory(memory.strptr(data.sfx.gheat_data), #data.sfx.gheat_data)
 	data.sfx.fstart = loadAudioStreamFromMemory(memory.strptr(data.sfx.fstart_data), #data.sfx.fstart_data)
-	sampRegisterChatCommand("pacman", function()
+	--[[sampRegisterChatCommand("pacman", function()
 		data.WinOpen[0] = not data.WinOpen[0]
 		if not data.game.started_sfx then
 			SetAudio(data.sfx.start)
 			data.game.started_sfx = true
 		end
-	end)
+	end)]]
 	while true do wait(500)
 		if data.game.ght ~= 3 and data.WinOpen[0] and data.game.started and data.game.rtime > 3 and not data.game.gameover[1] then
 			data.game.time = data.game.time + 0.5
@@ -407,7 +407,7 @@ function main()
 			end
 		end
 	end
-end
+end)
 local Win = imgui.OnFrame(
 function() return data.WinOpen[0] end,
 function(player)
@@ -702,7 +702,7 @@ function(player)
 				local dir = chooseRot(ghn[i])
 				if dir == -2 then
 					sampAddChatMessage("Err -2: "..ghn[i], -1)
-					sampAddChatMessage("Íå åáó êàê òàê âûøî, íàïèøè ñşäà: @olegsleash (VT/TG)", -1)
+					sampAddChatMessage("ĞĞµ ĞµĞ±Ñƒ ĞºĞ°Ğº Ñ‚Ğ°Ğº Ğ²Ñ‹ÑˆĞ¾, Ğ½Ğ°Ğ¿Ğ¸ÑˆĞ¸ ÑÑĞ´Ğ°: @olegsleash (VT/TG)", -1)
 				elseif dir == -1 then
 					for j = 1, 4 do
 						local mx, my = movet(data[ghn[i]].pos, j)
@@ -760,7 +760,7 @@ imgui.OnInitialize(function()
     imgui.GetIO().Fonts:Clear()
     local builder = imgui.ImFontGlyphRangesBuilder()
     glyph_ranges = imgui.GetIO().Fonts:GetGlyphRangesCyrillic()
-    builder:AddText([[‚„…†‡ˆ‰‹‘’“”•–—™›¹]])
+    builder:AddText([[â€šâ€â€¦â€ â€¡â‚¬â€°â€¹â€˜â€™â€œâ€â€¢â€“â€”â„¢â€ºâ„–]])
     local range = imgui.ImVector_ImWchar()
     builder:BuildRanges(range)
     imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(data.font_base85c, 14.0, nil,glyph_ranges)
@@ -814,3 +814,13 @@ addEventHandler('onWindowMessage', function(msg, key)
         end
     end
 end)
+local sleashGames = {}
+sleashGames.v = 1
+sleashGames.start = function()
+	data.WinOpen[0] = not data.WinOpen[0]
+	if not data.game.started_sfx then
+		SetAudio(data.sfx.start)
+		data.game.started_sfx = true
+	end
+end
+return sleashGames
