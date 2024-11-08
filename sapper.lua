@@ -89,7 +89,7 @@ function StartSapper(cell)
 end
 function main()
    while not isSampAvailable() do wait(100) end
-   sampRegisterChatCommand('sapper', function() if WinOpen[0] == false then StartSapper() else WinOpen[0] = false end end)
+--   sampRegisterChatCommand('sapper', function() if WinOpen[0] == false then StartSapper() else WinOpen[0] = false end end)
    wait(-1)
 end
 function OpenCell(cell)
@@ -361,7 +361,7 @@ function(player)
         end
         if imgui.ToggleButton(u8"Блок перемещения окна", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
         imgui.Text(u8"Вы можете выбрать уровнь ниже:")
-        if imgui.Button(u8"Легкий") then 
+        if imgui.Button(u8"Лёгкий") then 
             data.square_lot_imgui.x[0] = 9
             data.square_lot_imgui.y[0] = 9
             data.bombs_imgui[0] = 10
@@ -562,3 +562,8 @@ function CellsNear(cell1, cell2)
     if cell1%sl ~= 0 and cell2 == (cell1 + 1) then return true end
     return false
 end
+-- sleash games (SampGameStore) project
+local sleashGames = {}
+sleashGames.v = 1
+sleashGames.start = function() if WinOpen[0] == false then StartSnake() else WinOpen[0] = false end end
+return sleashGames
