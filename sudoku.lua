@@ -120,12 +120,13 @@ function StartSudoku(difficult)
     	else tempTable[a][b], startedSudoku[a][b] = 0, 0
 	end end
 end
-
+GenerateTables()
+lua_thread.create(function() while true do wait(1000) if not data.Winner and data.WinOpen[0] and data.Time >= 0 then data.Time = data.Time + 1 end end end)
 function main()
 	while not isSampAvailable() do wait(100) end
-	GenerateTables()
-	sampRegisterChatCommand("sudoku", function() data.WinOpen[0] = not data.WinOpen[0] end)
-	while true do wait(1000) if not data.Winner and data.WinOpen[0] and data.Time >= 0 then data.Time = data.Time + 1 end end
+	--GenerateTables()
+	--sampRegisterChatCommand("sudoku", function() data.WinOpen[0] = not data.WinOpen[0] end)
+	--while true do wait(1000) if not data.Winner and data.WinOpen[0] and data.Time >= 0 then data.Time = data.Time + 1 end end
 end
 function ConvertTime(time)
 	local asd = ""
@@ -677,3 +678,8 @@ imgui.OnInitialize(function()
     colors[clr.TextSelectedBg]         = ImVec4(0.92,0.46,0.14,1.00)
     function imgui.CenterColumnText(text) imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text).x / 2) imgui.Text(text) end
 end)
+--data.WinOpen[0] = not data.WinOpen[0]
+local sleashGames = {}
+sleashGames.v = 1
+sleashGames.start = function() data.WinOpen[0] = not data.WinOpen[0] end
+return sleashGames
