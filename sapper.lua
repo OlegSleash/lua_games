@@ -170,10 +170,10 @@ function(player)
             local RectSize = (data.cells_anims[i] ~= nil and data.cells_anims[i].NS or cell_size)
             local Ro = (cell_size - RectSize)/2
             dl:AddRectFilled({x=Ro+cpos.x+WP.x,y=Ro+cpos.y+WP.y}, {x = Ro+WP.x +cpos.x+RectSize, y = Ro+WP.y +cpos.y+RectSize}, RectColor, 8, GetRoundings(i))
-            if IsPosHovered(cpos, WP, cell_size, i) and data.game_step == 1 then data.stage_cell[i] = 2
+            if sapper_IsPosHovered(cpos, WP, cell_size, i) and data.game_step == 1 then data.stage_cell[i] = 2
                 data.LockHovCell = true
             else data.stage_cell[i] = 1 end
-            if IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(1) and data.game_step == 1 then
+            if sapper_IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(1) and data.game_step == 1 then
                 if data.all_flags == data.bombs then
                     sampAddChatMessage('{00FF00}[SAPPER]{FFFFFF} У Вас закончились флажки!')
                 else
@@ -188,7 +188,7 @@ function(player)
                         end
                     end)
                 end
-            elseif IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(0) and data.game_step == 1 then
+            elseif sapper_IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(0) and data.game_step == 1 then
                 AddCellAnim(i, 1, cell_size, cell_size*0.1, 0xFF55CC55, function()
                     if IsAllCellsClosed() then
                         data.square_lot.x = data.square_lot_imgui.x[0]
@@ -224,7 +224,7 @@ function(player)
             end
         elseif data.stage_cell[i] < 13 then
             local CalcStage = imgui.CalcTextSize(tostring(data.stage_cell[i]-4))
-            if IsPosHovered(cpos, WP, cell_size) and imgui.IsMouseReleased(0) then
+            if sapper_IsPosHovered(cpos, WP, cell_size) and imgui.IsMouseReleased(0) then
                 local nearflags, cellsforopen = GetNearFlags(i)
                 if nearflags == data.stage_cell[i]-4 and #cellsforopen > 0 then
                     for _, v in pairs(cellsforopen) do
@@ -398,7 +398,7 @@ function convertime(time)
     if time > 0 then asd = asd..time.."s " end
     return asd:sub(1)
 end
-function IsPosHovered(cpos, WP, cell_size, cellid)
+function sapper_IsPosHovered(cpos, WP, cell_size, cellid)
     if cellid ~= nil and data.cells_anims[cellid] ~= nil then return false end
     local p1, p2 = {x=cpos.x+WP.x,y=cpos.y+WP.y}, {x = WP.x +cpos.x+cell_size, y = WP.y +cpos.y+cell_size}
     local m = imgui.GetMousePos()
