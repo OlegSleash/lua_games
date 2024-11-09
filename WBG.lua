@@ -153,21 +153,21 @@ function updateData()
 		end
 	end
 end
--- РџРёС€Сѓ РїРѕРґ Р·РІСѓРєРё Р°СЂС‚РёР»РµСЂРёРё, РљСѓСЂСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ Р±Рё Р»Р°Р№Рє
--- РЎРїСѓСЃС‚СЏ С‚СЂРѕРµ СЃСѓС‚РѕРє (С‡РµС‚РІРµСЂРѕ, СЂРµС€РёР» РґРѕР±Р°РІРёС‚СЊ РїРѕРґСЃРєР°Р·РєРё) СЏ Р·Р°РєРѕРЅС‡РёР» РїРёСЃР°С‚СЊ this shit (РґР°, РІ РґРµРЅСЊ СЏ РїРёСЃР°Р» РїРѕ РЅРѕР»СЊ С†РµР»С‹С… С…СѓР№ РґРµСЃСЏС‚С‹С…)
+-- Пишу под звуки артилерии, Курская область би лайк
+-- Спустя трое суток (четверо, решил добавить подсказки) я закончил писать this shit (да, в день я писал по ноль целых хуй десятых)
 function randrot() return {random(0, 1) == 0 and -1 or 1, random(0, 1) == 0 and -1 or 1} end
 function checkField()
 	local queue = {}
 	for a = 1, 9 do
-		-- СЃС‚СЂРѕС‡РєРё
+		-- строчки
 		local nofull = false
 		for i = 1, 9 do if data.field[a][i] == 0 then nofull = true; break end end
 		if not nofull then for i = 1, 9 do table.insert(queue, {a, i}) end end
-		-- СЃС‚РѕР»Р±С‹
+		-- столбы
 		nofull = false
 		for i = 1, 9 do if data.field[i][a] == 0 then nofull = true; break end end
 		if not nofull then for i = 1, 9 do table.insert(queue, {i, a}) end end
-		-- РєРІР°РґСЂР°С‚С‹
+		-- квадраты
 		nofull = false
 		for i = 1, 9 do
 			if data.field[((a%3 == 0 and 3 or a%3)-1)*3 + (i%3 == 0 and 3 or i%3)][math.ceil(i/3)+ (math.ceil(a/3)-1)*3] == 0 then
@@ -358,37 +358,37 @@ function(player)
 	-- reset
 	imgui.SetCursorPos(imvec2(data.csize[0]*2, data.csize[0]*10.3))
 	imgui.PushStyleVarFloat(imgui.StyleVar.FrameRounding, 30)
-	if imgui.Button(u8"Р—Р°РЅРѕРІРѕ", imvec2(data.csize[0]*2, data.csize[0]*0.7)) then updateData() end
+	if imgui.Button(u8"Заново", imvec2(data.csize[0]*2, data.csize[0]*0.7)) then updateData() end
 	-- score shadow
 	imgui.PopStyleVar(1)
 	imgui.SetCursorPos(imvec2(data.csize[0]*4.2, data.csize[0]*10.3))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0,0,0,1))
-	imgui.Text(u8("РЎС‡С‘С‚: "..data.score))
+	imgui.Text(u8("Счёт: "..data.score))
 	imgui.PopStyleColor(1)
 	-- score
 	imgui.SetCursorPos(imvec2(data.csize[0]*4.2+2, data.csize[0]*10.3+2))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1,1,1,1))
-	imgui.Text(u8("РЎС‡С‘С‚: "..data.score))
+	imgui.Text(u8("Счёт: "..data.score))
 	imgui.PopStyleColor(1)
 	-- time shadow
 	imgui.SetCursorPos(imvec2(data.csize[0]*4.2, data.csize[0]*10.8))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0,0,0,1))
-	imgui.Text(u8("Р’СЂРµРјСЏ: "..convertTime(data.timep[1])))
+	imgui.Text(u8("Время: "..convertTime(data.timep[1])))
 	imgui.PopStyleColor(1)
 	-- time
 	imgui.SetCursorPos(imvec2(data.csize[0]*4.2+2, data.csize[0]*10.8+2))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1,1,1,1))
-	imgui.Text(u8("Р’СЂРµРјСЏ: "..convertTime(data.timep[1])))
+	imgui.Text(u8("Время: "..convertTime(data.timep[1])))
 	imgui.PopStyleColor(1)
 	-- size shadow
 	imgui.SetCursorPos(imvec2(data.csize[0]*7.5, data.csize[0]*10.3))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0,0,0,1))
-	imgui.Text(u8("Р Р°Р·РјРµСЂ:"))
+	imgui.Text(u8("Размер:"))
 	imgui.PopStyleColor(1)
 	-- size
 	imgui.SetCursorPos(imvec2(data.csize[0]*7.5+2, data.csize[0]*10.3+2))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1,1,1,1))
-	imgui.Text(u8("Р Р°Р·РјРµСЂ:"))
+	imgui.Text(u8("Размер:"))
 	imgui.PopStyleColor(1)
 	-- size slider
 	imgui.SetCursorPos(imvec2(data.csize[0]*7.5, data.csize[0]*11))
@@ -397,16 +397,16 @@ function(player)
 	if imgui.IsItemDeactivatedAfterEdit() then
 		data.csize[0] = data.csizetemp[0]
 	end
-	local tcal = imgui.CalcTextSize(u8"Р‘Р»РѕРє.").x
+	local tcal = imgui.CalcTextSize(u8"Блок.").x
 	-- lock shadow
 	imgui.SetCursorPos(imvec2(data.csize[0]*11 - tcal, data.csize[0]*10.3))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0,0,0,1))
-	imgui.Text(u8"Р‘Р»РѕРє.\nРћРєРЅР°:")
+	imgui.Text(u8"Блок.\nОкна:")
 	imgui.PopStyleColor(1)
 	-- lock
 	imgui.SetCursorPos(imvec2(data.csize[0]*11+2 - tcal, data.csize[0]*10.3+2))
 	imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1,1,1,1))
-	imgui.Text(u8"Р‘Р»РѕРє.\nРћРєРЅР°:")
+	imgui.Text(u8"Блок.\nОкна:")
 	imgui.PopStyleColor(1)
 	-- lock button
 	imgui.SetCursorPos(imvec2(data.csize[0]*11+2 - tcal, data.csize[0]*11.3))
@@ -436,7 +436,7 @@ function(player)
 		imgui.PopStyleColor(1)
  	end
  	if data.nomove then
- 		local nomt = "РќРµС‚\nРҐРѕРґРѕРІ"
+ 		local nomt = "Нет\nХодов"
  		local hkdc = imgui.CalcTextSize(u8(tostring(nomt)))
  		-- no move shadow
 		imgui.SetCursorPos(imvec2(data.csize[0] - hkdc.x/2 ,data.csize[0]*2+2))
@@ -480,7 +480,7 @@ function(player)
 	imgui.PopStyleColor(1)
  	imgui.SetCursorPos(imvec2(data.csize[0]*2.5-imgui.CalcTextSize(u8"(?)").x, data.csize[0]*0.2))
  	imgui.PushStyleColor(imgui.Col.TextDisabled, imgui.ImVec4(0,0,0,1))
- 	imgui.TextQuestion('(?)', u8'Р§С‚Рѕ Р±С‹ РІР·СЏС‚СЊ С„РёРіСѓСЂСѓ СЃ РїР°РЅРµР»Рё СЃРЅРёР·Сѓ - РЅР°Р¶РјРёС‚Рµ РЅР° РЅРµС‘ Р›РљРњ\nР§С‚Рѕ Р±С‹ РѕС‚РїСѓСЃС‚РёС‚СЊ С„РёРіСѓСЂСѓ, РЅР°Р¶РјРёС‚Рµ РџРљРњ\nР§С‚Рѕ Р±С‹ РІСЂР°С‰Р°С‚СЊ С„РёРіСѓСЂСѓ, РєРѕС‚РѕСЂСѓСЋ РІС‹ РґРµСЂР¶РёС‚Рµ - РЅР°Р¶РёРјР°Р№С‚Рµ A (Р°РЅРіР».) РёР»Рё D (Р°РЅРіР».)')
+ 	imgui.TextQuestion('(?)', u8'Что бы взять фигуру с панели снизу - нажмите на неё ЛКМ\nЧто бы отпустить фигуру, нажмите ПКМ\nЧто бы вращать фигуру, которую вы держите - нажимайте A (англ.) или D (англ.)')
 	imgui.PopStyleColor(1)
     imgui.End()
 end)
@@ -589,7 +589,7 @@ function imgui.ToggleButton(text, bool, a_speed)
     local dl = imgui.GetWindowDrawList()
     local bebrochka = false
     local label, label_true      = text or "", text or ""
-    local h          = imgui.GetTextLineHeightWithSpacing() -- Р’С‹СЃРѕС‚Р° РєРЅРѕРїРєРё
+    local h          = imgui.GetTextLineHeightWithSpacing() -- Высота кнопки
     local w,r,s      = h * 1.7, h / 2, a_speed or 0.2
     local function ImSaturate(f) return f < 0.0 and 0.0 or (f > 1.0 and 1.0 or f) end
     local x_begin = bool[0] and 1.0 or 0.0
@@ -610,9 +610,9 @@ function imgui.ToggleButton(text, bool, a_speed)
             t_begin = bool[0] and 1.0 - anim or anim
         else LastActive[label] = false end
     end
-    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Р¦РІРµС‚ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
-    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- Р¦РІРµС‚ С‚РµРєСЃС‚Р° РїСЂРё false
-    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- Р¦РІРµС‚ С‚РµРєСЃС‚Р° РїСЂРё true
+    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Цвет прямоугольника
+    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- Цвет текста при false
+    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- Цвет текста при true
     dl:AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + w, p.y + h), imgui.GetColorU32Vec4(bg_color), r)
     dl:AddCircleFilled(imgui.ImVec2(p.x + r + x_begin * (w - r * 2), p.y + r), t_begin < 0.5 and x_begin * r or t_begin * r, imgui.GetColorU32Vec4(imgui.ImVec4(0.9, 0.9, 0.9, 1.0)), r + 5)
     dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t_color), label_true)
@@ -632,4 +632,11 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() data.WinOpen[0] = not data.WinOpen[0] end
+sleashGames.name = u8"Wood Block Game"
+sleashGames.gitname = "WBG.lua"
+sleashGames.author = "Sleash"
+sleashGames.description = u8[[Wood Block Game - ?? ? ?????? ??-??????, ???? ?? ????? ?? mimgui]]
+sleashGames.min_ver_sgs = 1
+sleashGames.GetState = function() return data.WinOpen[0] end
+sleashGames.SetState = function(st) data.WinOpen[0] = st end
 return sleashGames

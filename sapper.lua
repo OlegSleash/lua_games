@@ -36,7 +36,7 @@ local data = {
     LockWin = false,
     LockHovCell = false
 }
-function imgui.AddCellAnim(cellid, frames, Ssize, Esize, Ecolor, Efunc)
+function AddCellAnim(cellid, frames, Ssize, Esize, Ecolor, Efunc)
     data.cells_anims[cellid] = {
         f = frames,
         Ss = (Esize-Ssize)/frames,
@@ -127,7 +127,7 @@ function OpenCell(cell)
         data.stage_cell[cell] = 4
         for k, v in pairs(data.state_cell) do
             if v[2] then 
-                imgui.AddCellAnim(k, 5, data.cs, data.cs*0.1, 0xFF55CC55, function()
+                AddCellAnim(k, 5, data.cs, data.cs*0.1, 0xFF55CC55, function()
                     data.state_cell[k][1] = true
                     if data.stage_cell[k] < 3 then data.stage_cell[k] = 4 end
                 end)
@@ -138,7 +138,7 @@ function OpenCell(cell)
         local nextCell = data.temp_cells[1]
         table.remove(data.temp_cells, 1)
         if data.state_cell[nextCell][1] then goto go_to_end_check end
-        imgui.AddCellAnim(nextCell, 1, data.cs, data.cs*0.1, 0xFF55CC55, function()
+        AddCellAnim(nextCell, 1, data.cs, data.cs*0.1, 0xFF55CC55, function()
             OpenCell(nextCell)
             --goto check_cells
         end)
@@ -170,15 +170,15 @@ function(player)
             local RectSize = (data.cells_anims[i] ~= nil and data.cells_anims[i].NS or cell_size)
             local Ro = (cell_size - RectSize)/2
             dl:AddRectFilled({x=Ro+cpos.x+WP.x,y=Ro+cpos.y+WP.y}, {x = Ro+WP.x +cpos.x+RectSize, y = Ro+WP.y +cpos.y+RectSize}, RectColor, 8, GetRoundings(i))
-            if imgui.IsPosHovered(cpos, WP, cell_size, i) and data.game_step == 1 then data.stage_cell[i] = 2
+            if IsPosHovered(cpos, WP, cell_size, i) and data.game_step == 1 then data.stage_cell[i] = 2
                 data.LockHovCell = true
             else data.stage_cell[i] = 1 end
-            if imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(1) and data.game_step == 1 then
+            if IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(1) and data.game_step == 1 then
                 if data.all_flags == data.bombs then
-                    sampAddChatMessage('{00FF00}[SAPPER]{FFFFFF} РЈ Р’Р°СЃ Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ С„Р»Р°Р¶РєРё!')
+                    sampAddChatMessage('{00FF00}[SAPPER]{FFFFFF} У Вас закончились флажки!')
                 else
                     data.all_flags = data.all_flags + 1
-                    imgui.AddCellAnim(i, 7, cell_size, cell_size*0.8, 0xFF3A3A3A, function()
+                    AddCellAnim(i, 7, cell_size, cell_size*0.8, 0xFF3A3A3A, function()
                         data.stage_cell[i] = 3
                         if data.state_cell[i][2] == true then
                             data.true_flags = data.true_flags + 1
@@ -188,8 +188,8 @@ function(player)
                         end
                     end)
                 end
-            elseif imgui.IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(0) and data.game_step == 1 then
-                imgui.AddCellAnim(i, 1, cell_size, cell_size*0.1, 0xFF55CC55, function()
+            elseif IsPosHovered(cpos, WP, cell_size, i) and imgui.IsMouseReleased(0) and data.game_step == 1 then
+                AddCellAnim(i, 1, cell_size, cell_size*0.1, 0xFF55CC55, function()
                     if IsAllCellsClosed() then
                         data.square_lot.x = data.square_lot_imgui.x[0]
                         data.square_lot.y = data.square_lot_imgui.y[0]
@@ -213,7 +213,7 @@ function(player)
             if imgui.IsItemHovered() then data.LockHovCell = true end
             if imgui.IsMouseReleased(1) and imgui.IsItemHovered() and data.game_step == 1 and data.stage_cell[i] == 3 then
                 data.all_flags = data.all_flags - 1
-                imgui.AddCellAnim(i, 7, cell_size*0.8, cell_size, 0xFF33AA33, function()
+                AddCellAnim(i, 7, cell_size*0.8, cell_size, 0xFF33AA33, function()
                     if data.stage_cell[i] == 3 then
                         data.stage_cell[i] = 1
                         if data.state_cell[i][2] == true then
@@ -224,11 +224,11 @@ function(player)
             end
         elseif data.stage_cell[i] < 13 then
             local CalcStage = imgui.CalcTextSize(tostring(data.stage_cell[i]-4))
-            if imgui.IsPosHovered(cpos, WP, cell_size) and imgui.IsMouseReleased(0) then
+            if IsPosHovered(cpos, WP, cell_size) and imgui.IsMouseReleased(0) then
                 local nearflags, cellsforopen = GetNearFlags(i)
                 if nearflags == data.stage_cell[i]-4 and #cellsforopen > 0 then
                     for _, v in pairs(cellsforopen) do
-                        imgui.AddCellAnim(v, 3, cell_size, cell_size*0.1, 0xFF55CC55, function() OpenCell(v) end)
+                        AddCellAnim(v, 3, cell_size, cell_size*0.1, 0xFF55CC55, function() OpenCell(v) end)
                     end
                 end
             end
@@ -249,11 +249,11 @@ function(player)
             0xBB000000, 7
         )
         local LoseTexts = {
-            u8"Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ Р’С‹ РїСЂРѕРёРіСЂР°Р»Рё.",
-            u8"РќРѕ Р’С‹ РјРѕР¶РµС‚Рµ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ СЃРЅРѕРІР°!",
-            u8"Р’Р°С€Р° СЃС‚Р°С‚РёСЃС‚РёРєР°:",
-            u8("Р’СЂРµРјСЏ: "..convertime(data.end_time-data.start_time)),
-            u8("РЈРіР°РґР°РЅРѕ С„Р»Р°Р¶РєРѕРІ: "..data.true_flags)
+            u8"К сожалению Вы проиграли.",
+            u8"Но Вы можете попробовать снова!",
+            u8"Ваша статистика:",
+            u8("Время: "..convertime(data.end_time-data.start_time)),
+            u8("Угадано флажков: "..data.true_flags)
         }
 
         for i, v in pairs(LoseTexts) do
@@ -269,9 +269,9 @@ function(player)
             0xBB000000, 7
         )
         local WinText = {
-            u8"РџРѕР·РґСЂР°РІР»СЏСЋ, Р’С‹ РїРѕР±РµРґРёР»Рё!",
-            u8"РњРѕР¶РµС‚Рµ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ Р±РѕР»РµРµ С‚СЂСѓРґРЅС‹Рµ РєРѕРјР±РёРЅР°С†РёРё!",
-            u8("Р’Р°С€Рµ РІСЂРµРјСЏ: "..convertime(data.end_time-data.start_time))
+            u8"Поздравляю, Вы победили!",
+            u8"Можете попробовать более трудные комбинации!",
+            u8("Ваше время: "..convertime(data.end_time-data.start_time))
         }
 
         for i, v in pairs(WinText) do
@@ -342,36 +342,36 @@ function(player)
         imgui.SetNextWindowSize(imgui.ImVec2((data.MenuAnimWindow/data.SMenuAnimWindow)*230, -1))
         imgui.SetNextWindowPos(imgui.ImVec2(WinSize.x + WP.x + 1, WP.y))
         imgui.Begin("MENU", data.ValidAnim, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar)
-        imgui.Text(u8"Р’С‹Р±РµСЂРµС‚Рµ РЅРёР¶Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р±РѕРјР±:")
+        imgui.Text(u8"Выберете ниже количество бомб:")
         imgui.SetNextItemWidth(-1)
         imgui.SliderInt("##bombs", data.bombs_imgui, 1, (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1)
-        imgui.Text(u8"Р’С‹Р±РµСЂРµС‚Рµ РЅРёР¶Рµ С€РёСЂРёРЅСѓ  РїРѕР»СЏ:")
+        imgui.Text(u8"Выберете ниже ширину  поля:")
         imgui.SetNextItemWidth(-1)
         if imgui.SliderInt("##square_lotx", data.square_lot_imgui.x, 4, 30) then
             if ((data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1) < data.bombs_imgui[0] then
                 data.bombs_imgui[0] = (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1
             end
         end
-        imgui.Text(u8"Р’С‹Р±РµСЂРµС‚Рµ РЅРёР¶Рµ РґР»РёРЅСѓ РїРѕР»СЏ:")
+        imgui.Text(u8"Выберете ниже длину поля:")
         imgui.SetNextItemWidth(-1)
         if imgui.SliderInt("##square_loty", data.square_lot_imgui.y, 4, 30) then
             if ((data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1) < data.bombs_imgui[0] then
                 data.bombs_imgui[0] = (data.square_lot_imgui.x[0]*data.square_lot_imgui.y[0])-1
             end
         end
-        if imgui.ToggleButton(u8"Р‘Р»РѕРє РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕРєРЅР°", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
-        imgui.Text(u8"Р’С‹ РјРѕР¶РµС‚Рµ РІС‹Р±СЂР°С‚СЊ СѓСЂРѕРІРЅСЊ РЅРёР¶Рµ:")
-        if imgui.Button(u8"Р›С‘РіРєРёР№") then 
+        if imgui.ToggleButton(u8"Блок перемещения окна", new.bool(data.LockWin)) then data.LockWin = not data.LockWin end
+        imgui.Text(u8"Вы можете выбрать уровнь ниже:")
+        if imgui.Button(u8"Лёгкий") then 
             data.square_lot_imgui.x[0] = 9
             data.square_lot_imgui.y[0] = 9
             data.bombs_imgui[0] = 10
         end imgui.SameLine()
-        if imgui.Button(u8"РЎСЂРµРґРЅРёР№") then 
+        if imgui.Button(u8"Средний") then 
             data.square_lot_imgui.x[0] = 16
             data.square_lot_imgui.y[0] = 16
             data.bombs_imgui[0] = 40
         end imgui.SameLine()
-        if imgui.Button(u8"РџСЂРѕС„Рё") then 
+        if imgui.Button(u8"Профи") then 
             data.square_lot_imgui.x[0] = 16
             data.square_lot_imgui.y[0] = 30
             data.bombs_imgui[0] = 99
@@ -398,7 +398,7 @@ function convertime(time)
     if time > 0 then asd = asd..time.."s " end
     return asd:sub(1)
 end
-function imgui.IsPosHovered(cpos, WP, cell_size, cellid)
+function IsPosHovered(cpos, WP, cell_size, cellid)
     if cellid ~= nil and data.cells_anims[cellid] ~= nil then return false end
     local p1, p2 = {x=cpos.x+WP.x,y=cpos.y+WP.y}, {x = WP.x +cpos.x+cell_size, y = WP.y +cpos.y+cell_size}
     local m = imgui.GetMousePos()
@@ -460,7 +460,7 @@ function imgui.ToggleButton(text, bool, a_speed)
     local dl = imgui.GetWindowDrawList()
     local bebrochka = false
     local label, label_true      = text or "", text or ""
-    local h          = imgui.GetTextLineHeightWithSpacing() -- Р’С‹СЃРѕС‚Р° РєРЅРѕРїРєРё
+    local h          = imgui.GetTextLineHeightWithSpacing() -- Высота кнопки
     local w,r,s      = h * 1.7, h / 2, a_speed or 0.2
     local function ImSaturate(f) return f < 0.0 and 0.0 or (f > 1.0 and 1.0 or f) end
     local x_begin = bool[0] and 1.0 or 0.0
@@ -481,9 +481,9 @@ function imgui.ToggleButton(text, bool, a_speed)
             t_begin = bool[0] and 1.0 - anim or anim
         else LastActive[label] = false end
     end
-    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Р¦РІРµС‚ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
-    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- Р¦РІРµС‚ С‚РµРєСЃС‚Р° РїСЂРё false
-    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- Р¦РІРµС‚ С‚РµРєСЃС‚Р° РїСЂРё true
+    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Цвет прямоугольника
+    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- Цвет текста при false
+    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- Цвет текста при true
     dl:AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + w, p.y + h), imgui.GetColorU32Vec4(bg_color), r)
     dl:AddCircleFilled(imgui.ImVec2(p.x + r + x_begin * (w - r * 2), p.y + r), t_begin < 0.5 and x_begin * r or t_begin * r, imgui.GetColorU32Vec4(imgui.ImVec4(0.9, 0.9, 0.9, 1.0)), r + 5)
     dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t_color), label_true)
@@ -566,4 +566,11 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() if WinOpen[0] == false then StartSapper() else WinOpen[0] = false end end
+sleashGames.name = u8"MineSweeper"
+sleashGames.gitname = "sapper.lua"
+sleashGames.author = "Sleash"
+sleashGames.description = u8[[Сапёр - одна из популярных игр-головоломок, которая была переписана под mimgui]]
+sleashGames.min_ver_sgs = 1
+sleashGames.GetState = function() return WinOpen[0] end
+sleashGames.SetState = function(st) WinOpen[0] = st end
 return sleashGames

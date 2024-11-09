@@ -24,19 +24,19 @@ local data = {
 	sett = false,
 	imgui = {
 		speed = {
-			disc = "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½Ð¸Ð¶Ðµ ÑÐºÐ¾Ñ€Ð¾ÑÑ‚ÑŒ Ð¸Ð³Ñ€Ñ‹: ",
+			disc = "Âûáåðèòå íèæå ñêîðîñòü èãðû: ",
 			v = new.int(60), 
 			min = 10,
 			max = 90
 		},
 		cells = {
-			disc = "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½Ð¸Ð¶Ðµ ÑÑ‚Ð¾Ñ€Ð¾Ð½Ñƒ ÐºÐ²Ð°Ð´Ñ€Ð°Ñ‚Ð° Ð¿Ð¾Ð»Ñ: ",
+			disc = "Âûáåðèòå íèæå ñòîðîíó êâàäðàòà ïîëÿ: ",
 			v = new.int(15),
 			min = 2,
 			max = 25
 		},
 		apples = {
-			disc = "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½Ð¸Ð¶Ðµ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ ÑÐ±Ð»Ð¾Ðº Ð½Ð° Ð¿Ð¾Ð»Ðµ: ",
+			disc = "Âûáåðèòå íèæå êîëè÷åñòâî ÿáëîê íà ïîëå: ",
 			v = new.int(3),
 			min = 1,
 			max = 50
@@ -77,7 +77,7 @@ local rotation_start_index
 function ImMin(lhs, rhs) return imgui.ImVec2(math.min(lhs.x, rhs.x), math.min(lhs.y, rhs.y)); end
 function ImMax(lhs, rhs) return imgui.ImVec2(math.max(lhs.x, rhs.x), math.max(lhs.y, rhs.y)); end
 function ImRotate(v, cos_a, sin_a) return imgui.ImVec2(v.x * cos_a - v.y * sin_a, v.x * sin_a + v.y * cos_a); end
-function imgui.RotateStart()
+function RotateStart()
    rotation_start_index = imgui.GetWindowDrawList().VtxBuffer.Size;
 end
 function ImRotationCenter()
@@ -89,7 +89,7 @@ function ImRotationCenter()
    return imgui.ImVec2((l.x+u.x)/2, (l.y+u.y)/2); -- or use _ClipRectStack?
 end
 function calcImVec2(l, r) return { x = l.x - r.x, y = l.y - r.y } end
-function imgui.RotateEnd(rad, center)
+function RotateEnd(rad, center)
    if center == nil then
       center = ImRotationCenter()
    end
@@ -111,7 +111,7 @@ local rot = 0.0
 local Win = imgui.OnFrame(
 function() return WinOpen[0] end,
 function(player)
-	if imgui.GetFrameCount() == 1 then sampAddChatMessage("[SNAKE] Ð”Ð»Ñ Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ñ Ð½Ð°ÑÑ‚Ñ€Ð¾ÐµÐº Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ SHIFT", -1) end
+	if imgui.GetFrameCount() == 1 then sampAddChatMessage("[SNAKE] Äëÿ îòêðûòèÿ íàñòðîåê íàæìèòå SHIFT", -1) end
 	imgui.SetNextWindowSize(imgui.ImVec2(600, 580), 4)
 	imgui.SetNextWindowPos(imgui.ImVec2(660,20), 4)
 	imgui.Begin('Snake', WinOpen, imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar)
@@ -160,11 +160,11 @@ function(player)
 		end
 		if #cell_snake > 0 then
 			imgui.SetCursorPos(imgui.ImVec2(offset.x + cell_snake[1][1]*params.cell_size + Offset, offset.y + cell_snake[1][2]*params.cell_size + Offset))
-			imgui.RotateStart() imgui.Image(images.head, imgui.ImVec2(params.cell_size, params.cell_size)) imgui.RotateEnd(rot)
+			RotateStart() imgui.Image(images.head, imgui.ImVec2(params.cell_size, params.cell_size)) RotateEnd(rot)
 		end
 		if #cell_snake > 1 and params.game_step == 1 and not data.sett then
 			for i = 2, #cell_snake do
-				-- ÑÑ‚Ñ€ÐµÐ¼Ð»ÐµÐ½Ð¸Ðµ Ð¾Ñ‚ ÑÐµÐ±Ñ Ðº ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ¹, Ð¸Ð¼ÐµÐ½Ð½Ð¾ Ñ‚Ð°Ðº Ð¸ ÑÐ´ÐµÐ»Ð°Ð½Ð¾ Ñ‚Ð¾ Ð´Ð²Ð¸Ð¶ÐµÐ½Ð¸Ðµ, Ð·Ð° ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¼ Ñ‚Ñ‹ ÑÐºÐ¾Ñ€ÐµÐµ Ð²ÑÐµÐ³Ð¾ Ð¿Ð¾Ð»ÐµÐ· Ð² ÐºÐ¾Ð´
+				-- ñòðåìëåíèå îò ñåáÿ ê ñëåäóþùåé, èìåííî òàê è ñäåëàíî òî äâèæåíèå, çà êîòîðûì òû ñêîðåå âñåãî ïîëåç â êîä
 				cell_snake[i][1] = cell_snake[i][1] + (cell_snake[i-1][1] - cell_snake[i][1])*math.sign(cell_snake[i][1])*(1/data.speed)
 				cell_snake[i][2] = cell_snake[i][2] + (cell_snake[i-1][2] - cell_snake[i][2])*math.sign(cell_snake[i][2])*(1/data.speed)
 				if i > 2 and getDistanceBetweenCoords2d(cell_snake[i][1]+0.5, cell_snake[i][2]+0.5, cell_snake[1][1]+0.5, cell_snake[1][2]+0.5) < 0.5 then
@@ -187,9 +187,9 @@ function(player)
 			0xBB000000
 		)
 		local LoseTexts = {
-            u8"Ðš ÑÐ¾Ð¶Ð°Ð»ÐµÐ½Ð¸ÑŽ Ð’Ñ‹ Ð¿Ñ€Ð¾Ð¸Ð³Ñ€Ð°Ð»Ð¸.",
-            u8("Ð’Ð°Ñˆ ÑÑ‡Ñ‘Ñ‚ ÑÐ¾ÑÑ‚Ð°Ð²Ð¸Ð»: "..data.score),
-            u8"ÐÐ¾ Ð’Ñ‹ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ Ð¿Ð¾Ð¿Ñ€Ð¾Ð±Ð¾Ð²Ð°Ñ‚ÑŒ ÑÐ½Ð¾Ð²Ð°!",
+            u8"Ê ñîæàëåíèþ Âû ïðîèãðàëè.",
+            u8("Âàø ñ÷¸ò ñîñòàâèë: "..data.score),
+            u8"Íî Âû ìîæåòå ïîïðîáîâàòü ñíîâà!",
         }
 
         for i, v in pairs(LoseTexts) do
@@ -207,9 +207,9 @@ function(player)
 			imgui.SetNextItemWidth(-1)
 			imgui.SliderInt("##"..k, param.v, param.min, param.max)
 		end
-		imgui.Text(u8"P.S. Ð•ÑÐ»Ð¸ Ð´Ð»Ñ ÑÐ±Ð»Ð¾Ðº Ð½Ðµ Ð±ÑƒÐ´ÐµÑ‚ Ð¼ÐµÑÑ‚Ð°, Ñ‚Ð¾ Ð¾Ð½Ð¸ Ð½Ðµ Ð·Ð°ÑÐ°Ð¿Ð²Ð½ÑÑ‚ÑÑ")
+		imgui.Text(u8"P.S. Åñëè äëÿ ÿáëîê íå áóäåò ìåñòà, òî îíè íå çàñàïâíÿòñÿ")
 		imgui.NewLine();imgui.NewLine();imgui.NewLine();
-		imgui.Text(u8"Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Ð±ÑƒÐ´ÑƒÑ‚ Ð¿Ñ€Ð¸Ð½ÑÑ‚Ñ‹ Ð¿Ð¾ÑÐ»Ðµ Ñ€ÐµÑÑ‚Ð°Ñ€Ñ‚Ð° Ð¸Ð³Ñ€Ñ‹ (R)")
+		imgui.Text(u8"Èçìåíåíèÿ áóäóò ïðèíÿòû ïîñëå ðåñòàðòà èãðû (R)")
 		imgui.PopTextWrapPos()
 	end
 	imgui.End()
@@ -286,4 +286,11 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() if WinOpen[0] == false then StartSnake() else WinOpen[0] = false end end
+sleashGames.name = u8"snake"
+sleashGames.gitname = "snake.lua"
+sleashGames.author = "Sleash"
+sleashGames.description = u8[[Çìåéêà - Ïîïóëÿðíàÿ âèäåî-èãðà, ïåðåïèñàííàÿ ïîä mimgui]]
+sleashGames.min_ver_sgs = 1
+sleashGames.GetState = function() return WinOpen[0] end
+sleashGames.SetState = function(st) WinOpen[0] = st end
 return sleashGames

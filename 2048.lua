@@ -1,9 +1,9 @@
 --2048
--- РЎРґРµР»Р°С‚СЊ 2 С‚Р°Р±Р»РёС†С‹, РѕРґРЅР° РґР»СЏ СЂРµРЅРґСЂР° РІС‚РѕСЂР°СЏ СЂРµР°Р»СЊРЅР°СЏ
--- РЎРґРµР»Р°Р», РѕР±Рё РѕРґРЅР° С‚Р°Р±Р»РёС†Р° - СЌС‚Рѕ РїРёР·РґРµС†, РЅРµРєРѕС‚РѕСЂС‹Рµ Р°РЅРёРјРєРё СЂРµРЅРґСЂСЏС‚СЃСЏ РїСЂР°РІРёР»СЊРЅРѕ, РЅРѕ РёСЃРїРѕР»РЅСЏСЋС‚СЃСЏ РЅРµ РІ РЅСѓР¶РЅРѕРј РїРѕСЂСЏРґРєРµ, С‡С‚Рѕ РјРѕР¶РµС‚ С‚СѓРїРѕ СѓРґР°Р»РёС‚СЊ РїСЂРµРґРјРµС‚
+-- Сделать 2 таблицы, одна для рендра вторая реальная
+-- Сделал, оби одна таблица - это пиздец, некоторые анимки рендрятся правильно, но исполняются не в нужном порядке, что может тупо удалить предмет
 
--- РЎРµС‚С‚РёРЅРіСЃ: С†РµР»СЊ, СЂР°Р·РјРµСЂ, СЃРІР°Р№Рї, СЃРєРѕСЂРѕСЃС‚СЊ Р°РЅРёРј
--- Р’РёРЅР»РѕСЃ + РёРЅС„РѕР±Р°СЂ: С‚Р°Р№Рј (РїРѕС…СѓР№, РІСЃРїРѕРјРЅРёР» РєРѕРіРґР° РїРµСЂРµРїРёСЃС‹РІР°Р» С‚РµРјСѓ РЅР° Р‘РҐ)) ), СЃС‡С‘С‚ + Р±РµСЃС‚
+-- Сеттингс: цель, размер, свайп, скорость аним
+-- Винлос + инфобар: тайм (похуй, вспомнил когда переписывал тему на БХ)) ), счёт + бест
 
 local imgui, encoding = require 'mimgui', require 'encoding'
 encoding.default = 'CP1251'
@@ -158,7 +158,7 @@ imgui.OnInitialize(function()
 end)
 local Win = imgui.OnFrame(function() return WinOpen[0] end,
 function(player)
-    if imgui.GetFrameCount() == 1 then sampAddChatMessage("[2048] {ffffff}Р”Р»СЏ РѕС‚РєСЂС‹С‚РёСЏ/Р·Р°РєСЂС‹С‚РёСЏ РјРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє РЅР°Р¶РјРёС‚Рµ РџРљРњ РІ Р»СЋР±РѕРј РјРµСЃС‚Рµ РѕРєРЅР°", 0xFFdae4ee) end
+    if imgui.GetFrameCount() == 1 then sampAddChatMessage("[2048] {ffffff}Для открытия/закрытия меню настроек нажмите ПКМ в любом месте окна", 0xFFdae4ee) end
     imgui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true
    imgui.Begin('2048', WinOpen, imgui.WindowFlags.NoScrollbar)
    local dl = imgui.GetWindowDrawList()
@@ -253,8 +253,8 @@ function(player)
             0xBB000000, 7
         )
         local LoseTexts = {
-            u8"Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ Р’С‹ РїСЂРѕРёРіСЂР°Р»Рё.",
-            u8"РќРѕ Р’С‹ РјРѕР¶РµС‚Рµ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ СЃРЅРѕРІР°!",
+            u8"К сожалению Вы проиграли.",
+            u8"Но Вы можете попробовать снова!",
         }
 
         for i, v in pairs(LoseTexts) do
@@ -270,8 +270,8 @@ function(player)
             0xBB000000, 7
         )
         local WinTexts = {
-            u8"РџРѕР·РґСЂР°РІР»СЏСЋ, Р’С‹ РїРѕР±РµРґРёР»Рё!",
-            u8"РњРѕР¶РµС‚Рµ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ Р±РѕР»РµРµ РІС‹СЃРѕРєСѓСЋ С†РµР»СЊ!",
+            u8"Поздравляю, Вы победили!",
+            u8"Можете попробовать более высокую цель!",
         }
 
         for i, v in pairs(WinTexts) do
@@ -287,11 +287,11 @@ function(player)
    if imgui.Button('Left', imgui.ImVec2(45,45)) then MaMtoleft() end imgui.SameLine()
    if imgui.Button('Down', imgui.ImVec2(45,45)) then MaMtodown() end imgui.SameLine()
    if imgui.Button('Right', imgui.ImVec2(45,45)) then MaMtoright() end
-   imgui.Text(u8'РљРѕР»РёС‡РµСЃС‚РІРѕ РєР»РµС‚РѕРє РЅР° РѕРґРЅРѕР№ СЃС‚РѕСЂРѕРЅРµ:') imgui.SameLine() imgui.SetNextItemWidth(75)
+   imgui.Text(u8'Количество клеток на одной стороне:') imgui.SameLine() imgui.SetNextItemWidth(75)
    if imgui.InputInt('  ', imgui_square_lot) then
-   if imgui_square_lot[0] < 4 then sampAddChatMessage('{00FF00}[2048]{FFFFFF} РљРѕР»РёС‡РµСЃС‚РІРѕ РєР»РµС‚РѕРє РЅР° РѕРґРЅРѕР№ СЃС‚РѕСЂРѕРЅРµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РјРµРЅСЊС€Рµ С‡РµС‚С‹СЂС‘С…!') imgui_square_lot[0] = 4
+   if imgui_square_lot[0] < 4 then sampAddChatMessage('{00FF00}[2048]{FFFFFF} Количество клеток на одной стороне не может быть меньше четырёх!') imgui_square_lot[0] = 4
    elseif imgui_square_lot[0] ~= nil then set.tzft.square_lot = imgui_square_lot[0] Start2048() end end
-   if imgui.Button(u8'РќР°С‡Р°С‚СЊ СЃРЅР°С‡Р°Р»Р°') then Start2048() end]]
+   if imgui.Button(u8'Начать сначала') then Start2048() end]]
    if #data.MoveAnims > 0 then for i, v in ipairs(data.MoveAnims) do
         data.MoveAnims[i].F = data.MoveAnims[i].F - 1
         if data.MoveAnims[i].F <= 0 then
@@ -305,19 +305,19 @@ function(player)
     else
         imgui.PushTextWrapPos(WS.x)
         imgui.Text(u8[[
-РЈРїСЂР°РІР»РµРЅРёРµ:
-    Р’РІРµСЂС…/Р’Р»РµРІРѕ/Р’РїСЂР°РІРѕ/Р’РЅРёР·: W/A/S/D СЃРѕРѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕ
-    Р РµСЃС‚Р°СЂС‚ РёРіСЂС‹: R
-    Р—Р°РєСЂС‹С‚СЊ РѕРєРЅРѕ СЃ РёРіСЂС‹Р№: Backspace
+Управление:
+    Вверх/Влево/Вправо/Вниз: W/A/S/D соответственно
+    Рестарт игры: R
+    Закрыть окно с игрый: Backspace
 
-РРЅС„РѕСЂРјР°С†РёСЏ:
-    РўР°Рє Р¶Рµ РїСЂРµРґСѓСЃРјРѕС‚СЂРµРЅРѕ СѓРїСЂР°РІР»РµРЅРёРµ СЃРІР°Р№РїР°РјРё РјС‹С€РєРё
-    Р”Р»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕРєРЅР° - РїРµСЂРµРјРµС‰Р°Р№С‚Рµ Р·Р° С‚РёС‚Р»Р±Р°СЂ (СЃРёРЅСЏСЏ РїРѕР»РѕСЃРєР° СЃРІРµСЂС…Сѓ)
-    РџРѕРјРёРјРѕ СЃРѕС…СЂР°РЅРµРЅРёСЏ Р»СѓС‡С€РµРіРѕ СЃС‡С‘С‚Р° СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ Рё РёРіСЂР°, С‚Рѕ РµСЃС‚СЊ РїРѕСЃР»Рµ РїРµСЂРµР·Р°РїСѓСЃРєР° РёРіСЂС‹/СЃРєСЂРёРїС‚РѕРІ РІС‹ СЃРјРѕР¶РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ РїР°СЂС‚РёСЋ
+Информация:
+    Так же предусмотрено управление свайпами мышки
+    Для перемещения окна - перемещайте за титлбар (синяя полоска сверху)
+    Помимо сохранения лучшего счёта сохраняется и игра, то есть после перезапуска игры/скриптов вы сможете продолжить партию
 
-РќР°СЃС‚СЂРѕР№РєРё:
+Настройки:
 ]])
-        imgui.Text(u8"Р’С‹Р±РµСЂРёС‚Рµ РЅРёР¶Рµ РєРѕРЅРµС‡РЅСѓСЋ С†РµР»СЊ РёРіСЂС‹:")
+        imgui.Text(u8"Выберите ниже конечную цель игры:")
         imgui.PushStyleColorU32(imgui.Col.Text, 0)
         imgui.SetNextItemWidth(-1)
         imgui.SliderInt("##final",imgui_final,6,20)
@@ -326,7 +326,7 @@ function(player)
         local ValC = imgui.CalcTextSize(Val)
         imgui.SetCursorPos({x = WS.x/2-ValC.x/2,y=imgui.GetCursorPosY()-ValC.y*1.5}); imgui.Text(Val)
 
-        imgui.Text(u8"Р’С‹Р±РµСЂРёС‚Рµ РЅРёР¶Рµ РєРѕРЅРµС‡РЅСѓСЋ С†РµР»СЊ РёРіСЂС‹:")
+        imgui.Text(u8"Выберите ниже конечную цель игры:")
         imgui.PushStyleColorU32(imgui.Col.Text, 0)
         imgui.SetNextItemWidth(-1)
         imgui.SliderInt("#squareLot", imgui_square_lot, 4, 10)
@@ -336,8 +336,8 @@ function(player)
         imgui.SetCursorPos({x = WS.x/2-ValC.x/2,y=imgui.GetCursorPosY()-ValC.y*1.5}); imgui.Text(Val)
 
         imgui.SetWindowFontScale(0.85)
-        imgui.Text(u8"Р’СЃРµ РёР·РјРµРЅРµРЅРёСЏ Р±СѓРґСѓС‚ РїСЂРёРјРµРЅРµРЅС‹ Рё СЃРѕС…СЂР°РЅРµРЅС‹ С‚РѕР»СЊРєРѕ РїСЂРё СЃС‚Р°СЂС‚Рµ РЅРѕРІРѕР№ РёРіСЂРµ")
-        imgui.Text(u8"Р”Р»СЏ С‚РѕРіРѕ С‡С‚Рѕ Р±С‹ РїСЂРёРЅСѓРґРёР»СЊРЅРѕ Р·Р°РїСѓСЃС‚РёС‚СЊ РЅРѕРІСѓСЋ РёРіСЂСѓ: Р’С‹Р№РґРёС‚Рµ РёР· РЅР°СЃС‚СЂРѕРµРє Рё РЅР°Р¶РјРёС‚Рµ R")
+        imgui.Text(u8"Все изменения будут применены и сохранены только при старте новой игре")
+        imgui.Text(u8"Для того что бы принудильно запустить новую игру: Выйдите из настроек и нажмите R")
         imgui.PopTextWrapPos()
         imgui.SetWindowFontScale(1)
     end
@@ -395,4 +395,11 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() if WinOpen[0] == false then Start2048() else WinOpen[0] = false end end
+sleashGames.name = u8"2048"
+sleashGames.gitname = "2048.lua"
+sleashGames.author = "Sleash"
+sleashGames.description = u8[[2048 - переписанная под mimgui популярная головоломка, принцип которой в перемещении плиток]]
+sleashGames.min_ver_sgs = 1
+sleashGames.GetState = function() return WinOpen[0] end
+sleashGames.SetState = function(st) WinOpen[0] = st end
 return sleashGames

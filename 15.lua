@@ -92,9 +92,9 @@ function() return WinOpen[0] end,
 function(player)
 	if imgui.GetFrameCount() == 1 then
 		Start15()
-		sampAddChatMessage("{00CCFF}[15]{FFFFFF} РЈРїСЂР°РІР»РµРЅРёРµ: W/A/S/D РёР»Рё РєР»РёРєРЅСѓС‚СЊ РЅР° РїР»РёС‚РєСѓ, РєРѕС‚РѕСЂСѓСЋ С…РѕС‚РёС‚Рµ РїРµСЂРµРґРІРёРЅСѓС‚СЊ", -1)
-		sampAddChatMessage("{00CCFF}[15]{FFFFFF} Р’С‹Р·РІР°С‚СЊ РЅСЃС‚СЂРѕР№РєРё - РџРљРњ РІ Р»СЋР±РѕРј РјРµСЃС‚Рµ РѕРєРЅР° | РџРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ РёРіСЂСѓ - R", -1)
-		sampAddChatMessage("{00CCFF}[15]{FFFFFF} Р§С‚Рѕ Р±С‹ Р·Р°РєСЂС‹С‚СЊ РѕРєРЅРѕ РµС‰С‘ СЂР°Р· РїСЂРѕРїРёС€РёС‚Рµ /15", -1)
+		sampAddChatMessage("{00CCFF}[15]{FFFFFF} Управление: W/A/S/D или кликнуть на плитку, которую хотите передвинуть", -1)
+		sampAddChatMessage("{00CCFF}[15]{FFFFFF} Вызвать нстройки - ПКМ в любом месте окна | Перезапустить игру - R", -1)
+		sampAddChatMessage("{00CCFF}[15]{FFFFFF} Что бы закрыть окно ещё раз пропишите /15", -1)
    		imgui.SetNextWindowSize(imgui.ImVec2(275,275))
 	end
    	imgui.Begin('15', WinOpen, imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar + (data.lockwin and imgui.WindowFlags.NoMove or 0))
@@ -107,11 +107,11 @@ function(player)
    		imgui.PushTextWrapPos(WS.x)
    		if imgui.Checkbox(u8"##NT", imgui.new.bool(data.NT)) then data.NT = not data.NT end
    		imgui.SameLine()
-   		imgui.Text(u8"РџРѕРґСЃРІРµС‡РёРІР°С‚СЊ РїР»РёС‚РєРё РЅР° РїСЂР°РІРёР»СЊРЅС‹С… РјРµСЃС‚Р°С…")
+   		imgui.Text(u8"Подсвечивать плитки на правильных местах")
 
    		if imgui.Checkbox(u8"##NM", imgui.new.bool(data.lockwin)) then data.lockwin = not data.lockwin end
    		imgui.SameLine()
-   		imgui.Text(u8"Р‘Р»РѕРёРєСЂРѕРІР°С‚СЊ РїРѕР»РѕР¶РµРЅРёРµ РѕРєРЅР°")
+   		imgui.Text(u8"Блоикровать положение окна")
    		imgui.PopTextWrapPos()
 	else
 	   	if game_step == 1 then
@@ -138,11 +138,11 @@ function(player)
 			end
 	   	elseif game_step == 2 then
    			imgui.PushTextWrapPos(WS.x)
-	   			imgui.Text(u8"РњРѕРё РїРѕР·РґСЂР°РІР»РµРЅРёСЏ, Р’С‹ СЃРјРѕРіР»Рё СЂРµС€РёС‚СЊ РіРѕР»РѕРІРѕР»РѕРјРєСѓ \"РїСЏС‚РЅР°С€РєРё!\"")
-	   			imgui.Text(u8("Р’СЂРµРјСЏ, Р·Р° РєРѕС‚РѕСЂРѕРµ Р±С‹Р»Р° РїСЂРѕР№РґРµРЅР° СЂР°СЃРєР»Р°РґРєР°: "..data.end_time-data.start_time.." СЃРµРєСѓРЅРґ"))
-	   			imgui.Text(u8("РљРѕР»РёС‡РµСЃС‚РІРѕ С…РѕРґРѕРІ, РїРѕС‚СЂРµР±РѕРІР°РЅРЅРѕРµ РЅР° СЂРµС€РµРЅРёРµ: "..data.moves))
-	   			imgui.Text(u8"Р’С‹ РјРѕР¶РµС‚Рµ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ СЃРЅРѕРІР°, С‡С‚Рѕ Р±С‹ СѓР»СѓС‡С€РёС‚СЊ СЃРІРѕРё СЂРµР·СѓР»СЊС‚Р°С‚С‹!")
-	   			imgui.Text(u8"Р§С‚Рѕ Р±С‹ Р·Р°РїСѓСЃС‚РёС‚СЊ РЅРѕРІСѓСЋ РїР°СЂС‚РёСЋ Р’С‹ РјРѕР¶РµС‚Рµ РЅР°Р¶Р°С‚СЊ R")
+	   			imgui.Text(u8"Мои поздравления, Вы смогли решить головоломку \"пятнашки!\"")
+	   			imgui.Text(u8("Время, за которое была пройдена раскладка: "..data.end_time-data.start_time.." секунд"))
+	   			imgui.Text(u8("Количество ходов, потребованное на решение: "..data.moves))
+	   			imgui.Text(u8"Вы можете попробовать снова, что бы улучшить свои результаты!")
+	   			imgui.Text(u8"Что бы запустить новую партию Вы можете нажать R")
    			imgui.PopTextWrapPos()
 	   	end
 	end
@@ -159,4 +159,11 @@ end)
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() WinOpen[0] = not WinOpen[0] end
+sleashGames.name = u8"Игра в 15"
+sleashGames.gitname = "15.lua"
+sleashGames.author = "Sleash"
+sleashGames.description = u8[["Пятнашки" или "Игра в 15" - головоломка и игра на сообразительность, переписанная под mimgui]]
+sleashGames.min_ver_sgs = 1
+sleashGames.GetState = function() return WinOpen[0] end
+sleashGames.SetState = function(st) WinOpen[0] = st end
 return sleashGames

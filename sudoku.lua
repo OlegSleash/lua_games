@@ -682,4 +682,11 @@ end)
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() data.WinOpen[0] = not data.WinOpen[0] end
+sleashGames.name = u8"sudoku"
+sleashGames.gitname = "sudoku.lua"
+sleashGames.author = "Sleash"
+sleashGames.description = u8[[Судоку - одна из популярных головоломок, которая была переписана под mimgui]]
+sleashGames.min_ver_sgs = 1
+sleashGames.GetState = function() return data.WinOpen[0] end
+sleashGames.SetState = function(st) data.WinOpen[0] = st end
 return sleashGames
