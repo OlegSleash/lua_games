@@ -816,7 +816,7 @@ addEventHandler('onWindowMessage', function(msg, key)
 end)
 --
 local sleashGames = {}
-sleashGames.v = 2
+sleashGames.v = 1
 sleashGames.start = function()
 	data.WinOpen[0] = not data.WinOpen[0]
 	if not data.game.started_sfx then
