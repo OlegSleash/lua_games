@@ -159,10 +159,10 @@ end)
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() WinOpen[0] = not WinOpen[0] end
-sleashGames.name = u8"Игра в 15"
+sleashGames.name = "Игра в 15"
 sleashGames.gitname = "15.lua"
 sleashGames.author = "Sleash"
-sleashGames.description = u8"\"Пятнашки\" или \"Игра в 15\" - головоломка и игра на сообразительность, переписанная под mimgui"
+sleashGames.description = "\"Пятнашки\" или \"Игра в 15\" - головоломка и игра на сообразительность, переписанная под mimgui"
 sleashGames.min_ver_sgs = 1
 sleashGames.GetState = function() return WinOpen[0] end
 sleashGames.SetState = function(st) WinOpen[0] = st end
