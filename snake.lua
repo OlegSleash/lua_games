@@ -286,10 +286,10 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() if WinOpen[0] == false then StartSnake() else WinOpen[0] = false end end
-sleashGames.name = u8"Snake"
+sleashGames.name = "Snake"
 sleashGames.gitname = "snake.lua"
 sleashGames.author = "Sleash"
-sleashGames.description = u8[[Змейка - Популярная видео-игра, переписанная под mimgui]]
+sleashGames.description = "Змейка - Популярная видео-игра, переписанная под mimgui"
 sleashGames.min_ver_sgs = 1
 sleashGames.GetState = function() return WinOpen[0] end
 sleashGames.SetState = function(st) WinOpen[0] = st end

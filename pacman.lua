@@ -827,7 +827,7 @@ end
 sleashGames.name = "PAC-MAC"
 sleashGames.gitname = "pacman.lua"
 sleashGames.author = "Sleash"
-sleashGames.description = u8[[Переписанная под mimgui одна из популярнейших игр - PAC-MAC]]
+sleashGames.description = "Переписанная под mimgui одна из популярнейших игр - PAC-MAC"
 sleashGames.min_ver_sgs = 1
 sleashGames.GetState = function() return data.WinOpen[0] end
 sleashGames.SetState = function(st) data.WinOpen[0] = st end

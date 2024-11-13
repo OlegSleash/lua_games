@@ -395,10 +395,10 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() if WinOpen[0] == false then Start2048() else WinOpen[0] = false end end
-sleashGames.name = u8"2048"
+sleashGames.name = "2048"
 sleashGames.gitname = "2048.lua"
 sleashGames.author = "Sleash"
-sleashGames.description = u8[[2048 - переписанная под mimgui популярная головоломка, принцип которой в перемещении плиток]]
+sleashGames.description = "2048 - переписанная под mimgui популярная головоломка, принцип которой в перемещении плиток"
 sleashGames.min_ver_sgs = 1
 sleashGames.GetState = function() return WinOpen[0] end
 sleashGames.SetState = function(st) WinOpen[0] = st end

@@ -566,10 +566,10 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() if WinOpen[0] == false then StartSapper() else WinOpen[0] = false end end
-sleashGames.name = u8"MineSweeper"
+sleashGames.name = "MineSweeper"
 sleashGames.gitname = "sapper.lua"
 sleashGames.author = "Sleash"
-sleashGames.description = u8[[—апЄр - одна из попул€рных игр-головоломок, котора€ была переписана под mimgui]]
+sleashGames.description = "—апЄр - одна из попул€рных игр-головоломок, котора€ была переписана под mimgui"
 sleashGames.min_ver_sgs = 1
 sleashGames.GetState = function() return WinOpen[0] end
 sleashGames.SetState = function(st) WinOpen[0] = st end

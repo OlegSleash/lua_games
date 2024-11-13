@@ -632,10 +632,10 @@ end
 local sleashGames = {}
 sleashGames.v = 1
 sleashGames.start = function() data.WinOpen[0] = not data.WinOpen[0] end
-sleashGames.name = u8"Wood Block Game"
+sleashGames.name = "Wood Block Game"
 sleashGames.gitname = "WBG.lua"
 sleashGames.author = "Sleash"
-sleashGames.description = u8[[Wood Block Game - одна из популярных игр-головоломок, которая была переписана под mimgui]]
+sleashGames.description = "Wood Block Game - одна из популярных игр-головоломок, которая была переписана под mimgui"
 sleashGames.min_ver_sgs = 1
 sleashGames.GetState = function() return data.WinOpen[0] end
 sleashGames.SetState = function(st) data.WinOpen[0] = st end
